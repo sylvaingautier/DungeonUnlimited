@@ -1,5 +1,5 @@
 #include "Logger.h"
-//#include "GameCore.h"
+#include "GameCore.h"
 
 
 
@@ -21,11 +21,11 @@ void main()
 	auto logOutput = logger->GetLogOutput(logOutputStr);
 	logger->SetLogPreferences(logFile, logLevel, logOutput);
 	logger->Log(__FILE__, __LINE__, "********** Debut ***********************", LogLevel::INFO);
-	/*GameCore mGameCore;
+	GameCore mGameCore;
 	
 	mGameCore.initGameCore();
 	mGameCore.loopGameCore();
-	mGameCore.endGameCore();*/
+	mGameCore.endGameCore();
 
 	logger->Log(__FILE__, __LINE__, "****************************************", LogLevel::INFO);
 }
