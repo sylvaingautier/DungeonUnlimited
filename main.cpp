@@ -21,6 +21,7 @@ void main()
 	auto logOutput = logger->GetLogOutput(logOutputStr);
 	logger->SetLogPreferences(logFile, logLevel, logOutput);
 	logger->Log(__FILE__, __LINE__, "********** Debut ***********************", LogLevel::INFO);
+	logger->Log(__FILE__, __LINE__, "Version 1.0", LogLevel::INFO);
 	GameCore mGameCore;
 	
 	mGameCore.initGameCore();
