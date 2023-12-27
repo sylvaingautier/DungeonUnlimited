@@ -3,6 +3,7 @@ namespace raylib {
 #include "raylib.h"
 }
 
+
 class Environnements
 {
 public:
