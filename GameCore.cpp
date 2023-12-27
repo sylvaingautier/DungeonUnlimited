@@ -1,5 +1,6 @@
 #include "GameCore.h"
 
+
 GameCore::GameCore()
 {
 }
@@ -10,7 +11,9 @@ void GameCore::initGameCore()
     //---------------------------------------------------------
     raylib::InitWindow(SCREENWIDTH, SCREENHEIGHT, "Dongeon Random");
     raylib::SetTargetFPS(60);
-    m_Environnement.initEnvironnements();
+
+
+
 }
 
 void GameCore::endGameCore()
@@ -22,6 +25,7 @@ void GameCore::loopGameCore()
 {
     // Main game loop
     bool affiche_grille = true;
+
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         //----------------------------------------------------------------------------------
@@ -33,17 +37,18 @@ void GameCore::loopGameCore()
         raylib::ClearBackground(raylib::BLACK);
         if (raylib::IsKeyDown(raylib::KEY_DOWN)) affiche_grille=false;
         if (raylib::IsKeyDown(raylib::KEY_UP)) affiche_grille=true;
-
-        raylib::DrawTexture(m_Environnement.texture, 0, 0, raylib::WHITE);
-        for (int x = 0; x < 24; x++)
+        
+       raylib::Texture2D texture = LoadTextureFromImage(test.map);
+       raylib::DrawTexture(texture, 0, 0, raylib::WHITE);
+        for (int x = 0; x < 20; x++)
         {
-            for (int y = 0; y < 12; y++)
+            for (int y = 0; y < 24; y++)
             {
                 if (affiche_grille == true)
                 {
                     raylib::DrawRectangleLines(x * 48, y * 48, 48, 48, raylib::GRAY);
                 }
-                    raylib::DrawText(raylib::TextFormat("%d", x+y*24), (x*48)+5, (y*48)+5, 10, raylib::WHITE);
+                    raylib::DrawText(raylib::TextFormat("%d", x+y*20), (x*48)+5, (y*48)+5, 10, raylib::WHITE);
             }
         }
 

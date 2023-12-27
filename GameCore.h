@@ -1,8 +1,10 @@
 #pragma once
+#include "Dungeon_map.h"
 namespace raylib {
 #include "raylib.h"
 }
-#include "Environnements.h"
+
+
 class GameCore
 {
 public:
@@ -11,7 +13,7 @@ public:
 	//----------------------------------------------------------------------------------
 	static const int SCREENWIDTH = 1280;
 	static const int SCREENHEIGHT = 720;
-	Environnements m_Environnement;
+	Dungeon_map test;
 
 public:
 	GameCore();

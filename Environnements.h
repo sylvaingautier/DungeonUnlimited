@@ -11,7 +11,6 @@ public:
 	// Local Variables Definition (local to this module)
 	//----------------------------------------------------------------------------------
 	raylib::Image m_Tileset;
-	raylib::Texture2D texture;
 
 public:
 	Environnements();
