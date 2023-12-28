@@ -130,17 +130,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Dungeon_map.cpp" />
     <ClCompile Include="Environnements.cpp" />
     <ClCompile Include="GameCore.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Randomer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Dungeon_map.h" />
     <ClInclude Include="Environnements.h" />
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Randomer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

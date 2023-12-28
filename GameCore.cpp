@@ -25,7 +25,8 @@ void GameCore::loopGameCore()
 {
     // Main game loop
     bool affiche_grille = true;
-
+    bool affiche_tileset = false;
+    raylib::Texture2D texture;
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         //----------------------------------------------------------------------------------
@@ -37,12 +38,20 @@ void GameCore::loopGameCore()
         raylib::ClearBackground(raylib::BLACK);
         if (raylib::IsKeyDown(raylib::KEY_DOWN)) affiche_grille=false;
         if (raylib::IsKeyDown(raylib::KEY_UP)) affiche_grille=true;
-        
-       raylib::Texture2D texture = LoadTextureFromImage(test.map);
-       raylib::DrawTexture(texture, 0, 0, raylib::WHITE);
-        for (int x = 0; x < 20; x++)
+        if (raylib::IsKeyDown(raylib::KEY_T)) affiche_tileset = true;
+        if (raylib::IsKeyDown(raylib::KEY_G)) affiche_tileset = false;
+        if (affiche_tileset == true)
         {
-            for (int y = 0; y < 24; y++)
+            texture = LoadTextureFromImage(test.m_Environnement.m_Tileset);
+        }
+        else
+        {
+             texture = LoadTextureFromImage(test.map);
+        }
+       raylib::DrawTexture(texture, 0, 0, raylib::WHITE);
+        for (int x = 0; x < test.m_Environnement.m_sizeTileSet_x; x++)
+        {
+            for (int y = 0; y < test.m_Environnement.m_sizeTileSet_y; y++)
             {
                 if (affiche_grille == true)
                 {
