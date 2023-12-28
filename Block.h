@@ -48,5 +48,6 @@ public:
 
 
 	int sol(long long haut, long long bas, long long gauche, long long droite);
+	int vide(long long haut, long long bas, long long gauche, long long droite);
 };
 
