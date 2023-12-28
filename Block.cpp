@@ -8,7 +8,7 @@ Block::~Block()
 {
 }
 
-int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
+int Block::getTilesetBlock(int couche,long long centre,long long haut, long long bas, long long gauche, long long droite)
 {
 	if (centre == Enum_type_dungeon_generator::NOTHING)
 	{
@@ -26,16 +26,24 @@ int Block::getTilesetBlock(long long centre,long long haut, long long bas, long 
 	
 		return mur( haut, bas,  gauche, droite);
 	}
-	if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
+	if (couche == 0)
 	{
-		//TilSet Porte
-		return porte(haut, bas, gauche, droite);
+		return sol();
 	}
-	if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
+	else
 	{
-		//TilSet Porte
-		return 234;
+		if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
+		{
+			//TilSet Porte
+			return porte(haut, bas, gauche, droite);
+		}
+		if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
+		{
+			//TilSet Porte
+			return 234;
+		}
 	}
+
 	return 0;
 
 }
@@ -66,6 +74,7 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 		if (((gauche & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER) &&
 			((droite & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER))
 		{
+			
 			// Mur horiz continue : 162[0-79] / 164(crack)[80-89] / 184(crack)[90-99]
 			int choix_mur = rand();
 			if (choix_mur < 80)
@@ -84,6 +93,12 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 		if (((gauche & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER) &&
 			((droite & Enum_type_dungeon_generator::PERIMETER) != Enum_type_dungeon_generator::PERIMETER))
 		{
+			// Mur fin à droite avec porte
+			if (((droite & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR) ||
+				((droite & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH))
+			{
+				return 212;
+			}
 			// Mur fin à droite
 			return 163;
 
@@ -91,6 +106,12 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 		if (((gauche & Enum_type_dungeon_generator::PERIMETER) != Enum_type_dungeon_generator::PERIMETER) &&
 			((droite & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER))
 		{
+			// Mur fin à gauche avec porte
+			if (((gauche & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR) ||
+				((gauche & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH))
+			{
+				return 213;
+			}
 			// Mur fin à gauche
 			return 161;
 
@@ -217,7 +238,7 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 
 
 
-int Block::sol()
+int Block::sol(long long haut, long long bas, long long gauche, long long droite)
 {
 	return 0;
 }

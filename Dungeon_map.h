@@ -46,7 +46,7 @@ my $BLOCK_DOOR  = $BLOCKED | $DOORSPACE;*/
 
 
 public:
-	raylib::Image map;
+	raylib::Image map[4];
 	Environnements m_Environnement;
 public:
 	rapidjson::Document d;

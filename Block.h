@@ -42,11 +42,11 @@ public:
 public:
 	Block();
 	~Block();
-	int getTilesetBlock(long long centre, long long haut, long long bas, long long gauche, long long droite);
+	int getTilesetBlock(int couche, long long centre, long long haut, long long bas, long long gauche, long long droite);
 	int porte(long long haut, long long bas, long long gauche, long long droite);
 	int mur(long long haut, long long bas, long long gauche, long long droite);
 
 
-	int sol();
+	int sol(long long haut, long long bas, long long gauche, long long droite);
 };
 

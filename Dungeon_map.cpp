@@ -16,27 +16,32 @@ Dungeon_map::Dungeon_map()
     d.ParseStream(isw);
     int size_y = d["cells"].Capacity();
     int size_x = d["cells"][0].Capacity();
-    map = raylib::GenImageColor(size_y * 48, size_x * 48, raylib::BLANK);
+    map[0] = raylib::GenImageColor(size_y * 48, size_x * 48, raylib::BLANK);
+    map[1] = raylib::GenImageColor(size_y * 48, size_x * 48, raylib::BLANK);
     raylib::Vector2 TileSizeXY;
     TileSizeXY.x = (float)m_Environnement.m_TileSize;
     TileSizeXY.y = (float)m_Environnement.m_TileSize;
-    
+
     raylib::Vector2 TilePosXY;
     TilePosXY.x = 0;
     TilePosXY.y = 0;
-    
-    raylib::Rectangle rectTile;
+
+    raylib::Rectangle rectTile{};
     rectTile.height = TileSizeXY.x;
     rectTile.width = TileSizeXY.y;
 
+    //Couche N°0 (Couche Fixe)
     for (int x = 0; x < size_x; x++)
     {
         for (int y = 0; y < size_y; y++)
         {
 
-                
-                
-            TilePosXY = m_Environnement.getTile(m_Environnement.m_Block.getTilesetBlock(
+
+            if ((x == 12) && (y == 14))
+            {
+                int tes = 0;
+            }
+            TilePosXY = m_Environnement.getTile(m_Environnement.m_Block.getTilesetBlock(0,
                 d["cells"][y][x].GetInt64(),
                 (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
                 (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
@@ -46,7 +51,7 @@ Dungeon_map::Dungeon_map()
             rectTile.x = TilePosXY.x;
             rectTile.y = TilePosXY.y;
 
-            raylib::ImageDraw(&map, m_Environnement.m_Tileset,
+            raylib::ImageDraw(&map[0], m_Environnement.m_Tileset,
                 rectTile,
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::GRAY);
@@ -59,5 +64,5 @@ Dungeon_map::Dungeon_map()
 
 Dungeon_map::~Dungeon_map()
 {
-    raylib::UnloadImage(map);
+    raylib::UnloadImage(map[0]);
 }
