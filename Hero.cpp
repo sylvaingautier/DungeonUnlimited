@@ -51,20 +51,20 @@ void Hero::Walk(int dir)
 	switch (dir)
 	{
 		case 1: //Haut
-			m_Index = (m_Index + 1) % 3;
-			m_RecHero.x = m_Index * m_HeroSize;
+			m_WalkIndex = (m_WalkIndex + 1) % 3;
+			m_RecHero.x = (3 - m_WalkIndex) * m_HeroSize;
 			m_RecHero.y = 4 * m_HeroSize;
 
 			break;
 		case 2: //Bas
-			m_Index = (m_Index + 1) % 3;
-			m_RecHero.x = m_Index * m_HeroSize;
+			m_WalkIndex = (m_WalkIndex + 1) % 3;
+			m_RecHero.x = (3 - m_WalkIndex) * m_HeroSize;
 			m_RecHero.y = 2 * m_HeroSize;
 			break;
 		case 3: //Gauche
 		case 4: //Droite
-			m_Index = (m_Index + 1) % 3;
-			m_RecHero.x = m_Index * m_HeroSize;
+			m_WalkIndex = (m_WalkIndex + 1) % 3;
+			m_RecHero.x = (3-m_WalkIndex) * m_HeroSize;
 			m_RecHero.y = 3 * m_HeroSize;
 			break;
 	}
@@ -75,31 +75,31 @@ int Hero::Attack(int dir)
 	switch (dir)
 	{
 	case 1:
-		m_Index = (m_Index + 1) % 4;
-		m_RecHero.x = m_Index * m_HeroSize;
+		m_AttackIndex = (m_AttackIndex + 1) % 5;
+		m_RecHero.x = (4 - m_AttackIndex % 4) * m_HeroSize;
 		m_RecHero.y = 7 * m_HeroSize;
 
 		break;
 	case 2:
-		m_Index = (m_Index + 1) % 4;
-		m_RecHero.x = m_Index * m_HeroSize;
+		m_AttackIndex = (m_AttackIndex + 1) % 5;
+		m_RecHero.x = (4 - m_AttackIndex % 4) * m_HeroSize;
 		m_RecHero.y = 5 * m_HeroSize;
 		break;
 	case 3:
-		m_Index = (m_Index + 1) % 4;
-		m_RecHero.x = (4-m_Index) * m_HeroSize;
+		m_AttackIndex = (m_AttackIndex + 1) % 5;
+		m_RecHero.x = (4- m_AttackIndex%4) * m_HeroSize;
 		m_RecHero.y = 6 * m_HeroSize;
 		break;
 	case 4:
-		m_Index = (m_Index + 1) % 4;
-		m_RecHero.x = m_Index * m_HeroSize;
+		m_AttackIndex = (m_AttackIndex + 1) % 5;
+		m_RecHero.x = m_AttackIndex%4 * m_HeroSize;
 		m_RecHero.y = 6 * m_HeroSize;
 		break;
 	}
-	switch (m_Index)
+	switch (m_AttackIndex)
 	{
 	case 0:
-		m_Time = 0.300f;
+		m_Time = 0.100f;
 		break;
 	case 1:
 		m_Time = 0.100f;
@@ -108,7 +108,10 @@ int Hero::Attack(int dir)
 		m_Time = 0.100f;
 		break;
 	case 3:
-		m_Time = 0.200f;
+		m_Time = 0.100f;
+		break;
+	case 4:
+		m_Time = 0.100f;
 		return 0;
 		break;
 	}

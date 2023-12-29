@@ -51,9 +51,10 @@ void GameCore::loopGameCore()
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         currentTime = raylib::GetTime();
-        if ((currentTime - previousTime_Hero) > 10)
+        if ((currentTime - previousTime_Hero) > 5)
         {
-           // hero.m_ActionCourante = 0;
+            hero.m_HeroActionCourante = 0;
+            hero.m_HeroDir = 0;
         }
         //----------------------------------------------------------------------------------
         // Draw
@@ -66,40 +67,70 @@ void GameCore::loopGameCore()
         if (raylib::IsKeyDown(raylib::KEY_T)) affiche_tileset = true;
         if (raylib::IsKeyDown(raylib::KEY_G)) affiche_tileset = false;
 
-        if (raylib::IsKeyDown(raylib::KEY_UP))
-        {
-            hero.m_HeroDir = 1;
-            hero.m_HeroActionCourante = 1;
-            map_pos_in_screen.y = map_pos_in_screen.y + hero.m_SpeedWalk;
-            previousTime_Hero = currentTime;
-
-        }
-        if (raylib::IsKeyDown(raylib::KEY_DOWN))
-        {
-            hero.m_HeroDir = 2;
-            hero.m_HeroActionCourante = 1;
-            map_pos_in_screen.y = map_pos_in_screen.y - hero.m_SpeedWalk;
-            previousTime_Hero = currentTime;
-        }
-        if (raylib::IsKeyDown(raylib::KEY_LEFT))
-        {
-            hero.m_HeroDir = 3;
-            hero.m_HeroActionCourante = 1;
-            map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
-            previousTime_Hero = currentTime;
-        }
-        if (raylib::IsKeyDown(raylib::KEY_RIGHT))
-        {
-            hero.m_HeroDir = 4;
-            hero.m_HeroActionCourante = 1;
-            map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
-            previousTime_Hero = currentTime;
-        }
-
         if (raylib::IsKeyDown(raylib::KEY_SPACE))
         {
             hero.m_HeroActionCourante = 2;
+            previousTime_Hero = currentTime;
+
         }
+        if (hero.m_HeroActionCourante == 2)
+        {
+            if (raylib::IsKeyDown(raylib::KEY_UP))
+            {
+                hero.m_HeroDir = 1;
+                previousTime_Hero = currentTime;
+
+            }
+            if (raylib::IsKeyDown(raylib::KEY_DOWN))
+            {
+                hero.m_HeroDir = 2;
+                previousTime_Hero = currentTime;
+            }
+            if (raylib::IsKeyDown(raylib::KEY_LEFT))
+            {
+                hero.m_HeroDir = 3;
+                previousTime_Hero = currentTime;
+            }
+            if (raylib::IsKeyDown(raylib::KEY_RIGHT))
+            {
+                hero.m_HeroDir = 4;
+                previousTime_Hero = currentTime;
+            }
+        }
+        else
+        {
+            hero.m_AttackIndex = 0;
+            if (raylib::IsKeyDown(raylib::KEY_UP))
+            {
+                hero.m_HeroDir = 1;
+                hero.m_HeroActionCourante = 1;
+                map_pos_in_screen.y = map_pos_in_screen.y + hero.m_SpeedWalk;
+                previousTime_Hero = currentTime;
+
+            }
+            if (raylib::IsKeyDown(raylib::KEY_DOWN))
+            {
+                hero.m_HeroDir = 2;
+                hero.m_HeroActionCourante = 1;
+                map_pos_in_screen.y = map_pos_in_screen.y - hero.m_SpeedWalk;
+                previousTime_Hero = currentTime;
+            }
+            if (raylib::IsKeyDown(raylib::KEY_LEFT))
+            {
+                hero.m_HeroDir = 3;
+                hero.m_HeroActionCourante = 1;
+                map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
+                previousTime_Hero = currentTime;
+            }
+            if (raylib::IsKeyDown(raylib::KEY_RIGHT))
+            {
+                hero.m_HeroDir = 4;
+                hero.m_HeroActionCourante = 1;
+                map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
+                previousTime_Hero = currentTime;
+            }
+        }
+
 
         if (affiche_tileset == true)
         {
