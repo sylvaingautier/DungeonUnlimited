@@ -12,7 +12,7 @@ Block::~Block()
 /// 
 /// </summary>
 /// <param name="centre"></param>
-/// <returns>0 = Rien ; 1 = Porte_H ; 2 = Grille_H ; 3 = Arche_H; 11 = Porte_V ; 12 = Grille_V ; 13 = Arche_V </returns>
+/// <returns>0 = Rien ; 1 = Porte_H ; 2 = Grille_H ; 3 = Arche_H; 4 = Porte_H_LOCK ; 5 = porte blokée;  11 = Porte_V ; 12 = Grille_V ; 13 = Arche_V ; 14 = Porte_V_LOCK; 15 = porte blokée </returns>
 int Block::isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite)
 {
 	//C'est une ouverture Horizontal
@@ -35,6 +35,16 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 		{
 			return 3;
 		}
+		// Porte Horizontal Lock
+		if ((centre & Enum_type_dungeon_generator::LOCKED) == Enum_type_dungeon_generator::LOCKED)
+		{
+			return 4;
+		}
+		// Porte Horizontal blocké Lock
+		if ((centre & Enum_type_dungeon_generator::SECRET) == Enum_type_dungeon_generator::SECRET)
+		{
+			return 5;
+		}
 	}
 	//C'est une ouverture Veticale
 	if ((((gauche & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) || ((gauche & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM))
@@ -56,6 +66,16 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 		if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
 		{
 			return 13;
+		}
+		// Porte Veticale Lock
+		if ((centre & Enum_type_dungeon_generator::LOCKED) == Enum_type_dungeon_generator::LOCKED)
+		{
+			return 14;
+		}
+		// Porte Veticale blocké Lock
+		if ((centre & Enum_type_dungeon_generator::SECRET) == Enum_type_dungeon_generator::SECRET)
+		{
+			return 15;
 		}
 	}
 	return 0;
@@ -168,7 +188,7 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 			((droite & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER))
 		{
 			// Mur en croix
-			return 283;
+			return 183;
 		}
 		if (((gauche & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER) &&
 			((droite & Enum_type_dungeon_generator::PERIMETER) != Enum_type_dungeon_generator::PERIMETER))

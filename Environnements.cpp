@@ -8,7 +8,7 @@ Environnements::Environnements()
 
 }
 
-void Environnements::initEnvironnements()
+void Environnements::Init()
 {
 	
 	m_Tileset = raylib::LoadImage("Resources/environnements/tilset_1/tiles_dungeon_v1.1_48x48.png");     // Loaded in CPU memory (RAM)
@@ -21,6 +21,9 @@ void Environnements::initEnvironnements()
 	m_TileSize = 48;
 	m_sizeTileSet_x = 20;
 	m_sizeTileSet_y = 24;
+
+
+
 }
 
 Environnements::~Environnements()

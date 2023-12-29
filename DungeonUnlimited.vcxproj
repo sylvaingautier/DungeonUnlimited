@@ -134,6 +134,7 @@
     <ClCompile Include="Dungeon_map.cpp" />
     <ClCompile Include="Environnements.cpp" />
     <ClCompile Include="GameCore.cpp" />
+    <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Randomer.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="Dungeon_map.h" />
     <ClInclude Include="Environnements.h" />
     <ClInclude Include="GameCore.h" />
+    <ClInclude Include="Hero.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Randomer.h" />
   </ItemGroup>
