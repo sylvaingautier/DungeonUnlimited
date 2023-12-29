@@ -8,7 +8,61 @@ Block::~Block()
 {
 }
 
-int Block::getTilesetBlock(int couche,long long centre,long long haut, long long bas, long long gauche, long long droite)
+/// <summary>
+/// 
+/// </summary>
+/// <param name="centre"></param>
+/// <returns>0 = Rien ; 1 = Porte_H ; 2 = Grille_H ; 3 = Arche_H; 11 = Porte_V ; 12 = Grille_V ; 13 = Arche_V </returns>
+int Block::isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite)
+{
+	//C'est une ouverture Horizontal
+	if ( (((haut & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) || ((haut & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM))
+		&&
+		 (((bas & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR)  || ((bas & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM)) )
+	{
+		// Porte Horizontal
+		if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
+		{
+			return 1;
+		}
+		// Grille Horizontal
+		if ((centre & Enum_type_dungeon_generator::PORTC) == Enum_type_dungeon_generator::PORTC)
+		{
+			return 2;
+		}
+		// Arche Horizontal
+		if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
+		{
+			return 3;
+		}
+	}
+	//C'est une ouverture Veticale
+	if ((((gauche & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) || ((gauche & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM))
+		&&
+		(((droite & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) || ((droite & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM)))
+
+	{
+		// Porte Veticale
+		if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
+		{
+			return 11;
+		}
+		// Grille Veticale
+		if ((centre & Enum_type_dungeon_generator::PORTC) == Enum_type_dungeon_generator::PORTC)
+		{
+			return 12;
+		}
+		// Arche Veticale
+		if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
+		{
+			return 13;
+		}
+	}
+	return 0;
+	
+}
+
+int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
 {
 	if (centre == Enum_type_dungeon_generator::NOTHING)
 	{
@@ -27,26 +81,7 @@ int Block::getTilesetBlock(int couche,long long centre,long long haut, long long
 	
 		return mur( haut, bas,  gauche, droite);
 	}
-	if (couche == 0)
-	{
-		return sol(haut, bas, gauche, droite);
-	}
-	else
-	{
-		if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
-		{
-			//TilSet Porte
-			return porte(haut, bas, gauche, droite);
-		}
-		if ((centre & Enum_type_dungeon_generator::ARCH) == Enum_type_dungeon_generator::ARCH)
-		{
-			//TilSet Porte
-			return 234;
-		}
-	}
-
-	return 0;
-
+	return sol(haut, bas, gauche, droite);
 }
 int Block::porte(long long haut, long long bas, long long gauche, long long droite)
 {
@@ -241,9 +276,23 @@ int Block::mur(long long haut, long long bas, long long gauche, long long droite
 
 int Block::sol(long long haut, long long bas, long long gauche, long long droite)
 {
+	Randomer rand(0, 8);
+	int choix_sol = rand();
+	switch (choix_sol)
+	{
+		case 1:
+			return 20;
+			break;
+		case 2:
+			return 22;
+			break;
+		case 3:
+			return 23;
+			break;
+	}
 	
-	
-	return 0;
+
+	return 21;
 }
 int Block::vide(long long haut, long long bas, long long gauche, long long droite)
 {
@@ -256,23 +305,22 @@ int Block::vide(long long haut, long long bas, long long gauche, long long droit
 		{
 			return 3;
 		}
-		if ( (gauche == Enum_type_dungeon_generator::NOTHING) &&
-			((droite & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR))
+		if ((gauche == Enum_type_dungeon_generator::NOTHING) &&
+			(droite != Enum_type_dungeon_generator::NOTHING))
 		{
 			return 36;
 		}
-		if (((gauche & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) &&
+		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
 			(droite == Enum_type_dungeon_generator::NOTHING))
 		{
 			return 34;
 		}
-		if (((gauche & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) &&
-			((droite & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR))
+		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
+			(droite != Enum_type_dungeon_generator::NOTHING))
 		{
 			return 39;
 		}
 	}
-
 	if ((haut == Enum_type_dungeon_generator::NOTHING) && 
 		(bas != Enum_type_dungeon_generator::NOTHING))
 	{
@@ -303,7 +351,7 @@ int Block::vide(long long haut, long long bas, long long gauche, long long droit
 		if ((gauche == Enum_type_dungeon_generator::NOTHING) &&
 			(droite == Enum_type_dungeon_generator::NOTHING))
 		{
-			return 0;
+			return 58;
 		}
 		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
 			(droite != Enum_type_dungeon_generator::NOTHING))
@@ -313,12 +361,36 @@ int Block::vide(long long haut, long long bas, long long gauche, long long droit
 		if ((gauche == Enum_type_dungeon_generator::NOTHING) &&
 			(droite != Enum_type_dungeon_generator::NOTHING))
 		{
-			return 0;
+			return 59;
 		}
 		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
 			(droite == Enum_type_dungeon_generator::NOTHING))
 		{
-			return 0;
+			return 57;
+		}
+	}
+	if ((haut != Enum_type_dungeon_generator::NOTHING) &&
+		(bas == Enum_type_dungeon_generator::NOTHING))
+	{
+		if ((gauche == Enum_type_dungeon_generator::NOTHING) &&
+			(droite == Enum_type_dungeon_generator::NOTHING))
+		{
+			return 15;
+		}
+		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
+			(droite != Enum_type_dungeon_generator::NOTHING))
+		{
+			return 77;
+		}
+		if ((gauche == Enum_type_dungeon_generator::NOTHING) &&
+			(droite != Enum_type_dungeon_generator::NOTHING))
+		{
+			return 16;
+		}
+		if ((gauche != Enum_type_dungeon_generator::NOTHING) &&
+			(droite == Enum_type_dungeon_generator::NOTHING))
+		{
+			return 14;
 		}
 	}
 	return 3;

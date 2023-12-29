@@ -42,7 +42,8 @@ public:
 public:
 	Block();
 	~Block();
-	int getTilesetBlock(int couche, long long centre, long long haut, long long bas, long long gauche, long long droite);
+	int isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite);
+	int getTilesetBlock(long long centre, long long haut, long long bas, long long gauche, long long droite);
 	int porte(long long haut, long long bas, long long gauche, long long droite);
 	int mur(long long haut, long long bas, long long gauche, long long droite);
 
