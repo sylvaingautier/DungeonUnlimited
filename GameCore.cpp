@@ -32,6 +32,7 @@ void GameCore::loopGameCore()
     raylib::Texture2D texture1;
     raylib::Texture2D texture2;
     raylib::Texture2D texture3;
+    raylib::Texture2D texture4;
     raylib::Texture2D texHero;
     raylib::Texture2D texHero_Flip_Horizontal;
     raylib::Texture2D texmapCollision;
@@ -43,6 +44,7 @@ void GameCore::loopGameCore()
     texture1 = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);
     texture2 = LoadTextureFromImage(TheDungeon.map[0]);
     texture3 = LoadTextureFromImage(TheDungeon.map[1]);
+    texture4 = LoadTextureFromImage(TheDungeon.map[2]);
     texmapCollision = LoadTextureFromImage(TheDungeon.mapCollision);
     // Custom timming variables
     double previousTime_Hero = raylib::GetTime();
@@ -141,12 +143,12 @@ void GameCore::loopGameCore()
         }
         else if (affiche_mapCollision==true)
         {
-            raylib::DrawTexture(texmapCollision, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+            raylib::DrawTexture(texture3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
         }
         else
         {
             raylib::DrawTexture(texture2, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
-            
+            raylib::DrawTexture(texture3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
             if (hero.m_HeroDir == 0)
             {
                 if ((currentTime - previousTime_HeroIdle) > hero.m_TimeWait)
@@ -183,7 +185,7 @@ void GameCore::loopGameCore()
                     raylib::DrawTextureRec(texHero, hero.m_RecHero, Mvt, raylib::WHITE);
                 }
             }
-            raylib::DrawTexture(texture3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+            raylib::DrawTexture(texture4, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
         }
        
        if (affiche_tileset == true)

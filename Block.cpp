@@ -104,11 +104,64 @@ raylib::Color Block::getBlockType(long long centre)
 	{
 		//TileSet Mur
 		 returnColor = { 0,255,0,255 };
-
-
 	}
-
+	// Porte Horizontal
+	if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
+	{
+		returnColor = { 0,0,255,255 };
+	}
+	// Grille Horizontal
+	if ((centre & Enum_type_dungeon_generator::PORTC) == Enum_type_dungeon_generator::PORTC)
+	{
+		returnColor = { 0,0,255,255 };
+	}
+	// Porte Horizontal Lock
+	if ((centre & Enum_type_dungeon_generator::LOCKED) == Enum_type_dungeon_generator::LOCKED)
+	{
+		returnColor = { 0,0,128,255 };
+	}
+	// Porte Horizontal blocké Lock
+	if ((centre & Enum_type_dungeon_generator::SECRET) == Enum_type_dungeon_generator::SECRET)
+	{
+		returnColor = { 0,0,64,255 };
+	}
 	return returnColor;
+}
+int Block::getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD)
+{
+	if (centre == Enum_type_dungeon_generator::NOTHING)
+	{
+		//TileSet Vide
+		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
+			(HD == Enum_type_dungeon_generator::NOTHING) &&
+			(BG == Enum_type_dungeon_generator::NOTHING) &&
+			(BD != Enum_type_dungeon_generator::NOTHING))
+		{
+			return 38;
+		}
+		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
+			(HD == Enum_type_dungeon_generator::NOTHING) &&
+			(BG != Enum_type_dungeon_generator::NOTHING) &&
+			(BD == Enum_type_dungeon_generator::NOTHING))
+		{
+			return 37;
+		}
+		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
+			(HD != Enum_type_dungeon_generator::NOTHING) &&
+			(BG == Enum_type_dungeon_generator::NOTHING) &&
+			(BD == Enum_type_dungeon_generator::NOTHING))
+		{
+			return 0;
+		}
+		if ((HG != Enum_type_dungeon_generator::NOTHING) &&
+			(HD == Enum_type_dungeon_generator::NOTHING) &&
+			(BG == Enum_type_dungeon_generator::NOTHING) &&
+			(BD == Enum_type_dungeon_generator::NOTHING))
+		{
+			return 0;
+		}
+	}
+	return 0;
 }
 int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
 {

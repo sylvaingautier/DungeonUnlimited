@@ -18,7 +18,7 @@ public:
 	raylib::Rectangle m_RecHero{};
 	int m_HeroDir=0; //0=IDLE
 	int m_HeroActionCourante = 0; //0=Aucune action
-	int m_SpeedWalk=3;
+	int m_SpeedWalk=16; //3
 
 	float m_TimeWait = 0.100f;
 	raylib::Vector2 m_MicroMvtHero{};
