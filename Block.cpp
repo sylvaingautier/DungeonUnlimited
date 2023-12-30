@@ -81,12 +81,40 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 	return 0;
 	
 }
+raylib::Color Block::getBlockType(long long centre)
+{
+	raylib::Color returnColor{};
+	returnColor = { 255,0,0,255 };
+	if ((centre & Enum_type_dungeon_generator::NOTHING) == Enum_type_dungeon_generator::NOTHING)
+	{
+		//TileSet Vide
+		returnColor = { 0,0,0 ,255 };
+	}
+	if ((centre & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR)
+	{
+		//TileSet Sol
+		returnColor = { 255,0,0 ,255 };
+	}
+	if ((centre & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM)
+	{
+		//TileSet Sol
+		returnColor = { 128,0,0 ,255 };
+	}
+	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
+	{
+		//TileSet Mur
+		 returnColor = { 0,255,0,255 };
 
+
+	}
+
+	return returnColor;
+}
 int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
 {
 	if (centre == Enum_type_dungeon_generator::NOTHING)
 	{
-		//TileSet mur
+		//TileSet Vide
 		
 		return vide(haut, bas, gauche, droite);
 	}

@@ -21,6 +21,7 @@ Dungeon_map::Dungeon_map()
     int size_x = d["cells"][0].Capacity();
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[1] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
+    mapCollision = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
 
     raylib::Vector2 TileSizeXY;
     TileSizeXY.x = (float)m_Environnement.m_TileSize;
@@ -53,6 +54,9 @@ Dungeon_map::Dungeon_map()
                 rectTile,
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::GRAY);
+
+            raylib::ImageDrawRectangle(&mapCollision, x * m_Environnement.m_TileSize, y * m_Environnement.m_TileSize, TileSizeXY.x, TileSizeXY.y, m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()));       // Draw rectangle within an image
+
         }
     }
     //Couche N°1 (ouverture(Porte/Grille/Arche))

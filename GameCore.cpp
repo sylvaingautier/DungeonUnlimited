@@ -28,11 +28,13 @@ void GameCore::loopGameCore()
     // Main game loop
     bool affiche_grille = true;
     bool affiche_tileset = false;
+    bool affiche_mapCollision = false;
     raylib::Texture2D texture1;
     raylib::Texture2D texture2;
     raylib::Texture2D texture3;
     raylib::Texture2D texHero;
     raylib::Texture2D texHero_Flip_Horizontal;
+    raylib::Texture2D texmapCollision;
     raylib::Vector2 map_pos_in_screen{};
     map_pos_in_screen.x = 0;
     map_pos_in_screen.y = 0;
@@ -41,6 +43,7 @@ void GameCore::loopGameCore()
     texture1 = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);
     texture2 = LoadTextureFromImage(TheDungeon.map[0]);
     texture3 = LoadTextureFromImage(TheDungeon.map[1]);
+    texmapCollision = LoadTextureFromImage(TheDungeon.mapCollision);
     // Custom timming variables
     double previousTime_Hero = raylib::GetTime();
     double previousTime_HeroIdle = raylib::GetTime();
@@ -62,11 +65,12 @@ void GameCore::loopGameCore()
         raylib::BeginDrawing();
 
         raylib::ClearBackground(raylib::BLACK);
-        if (raylib::IsKeyDown(raylib::KEY_A)) affiche_grille=false;
-        if (raylib::IsKeyDown(raylib::KEY_Z)) affiche_grille=true;
-        if (raylib::IsKeyDown(raylib::KEY_T)) affiche_tileset = true;
-        if (raylib::IsKeyDown(raylib::KEY_G)) affiche_tileset = false;
-
+        if (raylib::IsKeyDown(raylib::KEY_U)) affiche_grille=false;
+        if (raylib::IsKeyDown(raylib::KEY_J)) affiche_grille=true;
+        if (raylib::IsKeyDown(raylib::KEY_O)) affiche_tileset = true;
+        if (raylib::IsKeyDown(raylib::KEY_L)) affiche_tileset = false;
+        if (raylib::IsKeyDown(raylib::KEY_I)) affiche_mapCollision = true;
+        if (raylib::IsKeyDown(raylib::KEY_K)) affiche_mapCollision = false;
         if (raylib::IsKeyDown(raylib::KEY_SPACE))
         {
             hero.m_HeroActionCourante = 2;
@@ -135,6 +139,10 @@ void GameCore::loopGameCore()
         {
             raylib::DrawTexture(texture1, 0, 0, raylib::WHITE);
         }
+        else if (affiche_mapCollision==true)
+        {
+            raylib::DrawTexture(texmapCollision, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+        }
         else
         {
             raylib::DrawTexture(texture2, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
@@ -150,7 +158,6 @@ void GameCore::loopGameCore()
             }
             else
             {
-
                 if ((currentTime - previousTime_HeroWalk) > hero.m_TimeWait)
                 {
                     if (hero.m_HeroActionCourante == 2)
@@ -169,7 +176,7 @@ void GameCore::loopGameCore()
                 Mvt.y += hero.m_HeroPos.y;
                 if (hero.m_HeroDir == 4)
                 {
-                    raylib::DrawTextureRec(texHero_Flip_Horizontal, hero.m_RecHero, Mvt, raylib::WHITE);
+                    raylib::DrawTextureRec(texHero_Flip_Horizontal, hero.m_RecHero, Mvt, raylib::WHITE); //raylib::Color{ 255,255,255,255});
                 }
                 else
                 {

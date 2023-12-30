@@ -16,6 +16,7 @@ class Dungeon_map
 
 public:
 	raylib::Image map[4];
+	raylib::Image mapCollision;
 	Environnements m_Environnement;
 
 public:
