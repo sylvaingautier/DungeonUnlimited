@@ -18,7 +18,11 @@ public:
 	raylib::Image map[4];
 	raylib::Image mapCollision;
 	Environnements m_Environnement;
+	struct s_liste_block
+	{
+		std::vector<int> Block;
 
+	};
 public:
 	rapidjson::Document d;
 	Dungeon_map();

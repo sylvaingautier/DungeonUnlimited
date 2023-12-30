@@ -127,41 +127,39 @@ raylib::Color Block::getBlockType(long long centre)
 	}
 	return returnColor;
 }
-int Block::getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD)
+std::vector<int> Block::getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD, long long haut, long long bas, long long gauche, long long droite)
 {
+	std::vector<int> list;
 	if (centre == Enum_type_dungeon_generator::NOTHING)
 	{
 		//TileSet Vide
-		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
-			(HD == Enum_type_dungeon_generator::NOTHING) &&
-			(BG == Enum_type_dungeon_generator::NOTHING) &&
-			(BD != Enum_type_dungeon_generator::NOTHING))
+		if ((BD != Enum_type_dungeon_generator::NOTHING) &&
+			(bas == Enum_type_dungeon_generator::NOTHING) &&
+			(droite == Enum_type_dungeon_generator::NOTHING))
 		{
-			return 38;
+			list.push_back(38);
 		}
-		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
-			(HD == Enum_type_dungeon_generator::NOTHING) &&
-			(BG != Enum_type_dungeon_generator::NOTHING) &&
-			(BD == Enum_type_dungeon_generator::NOTHING))
+		if ((BG != Enum_type_dungeon_generator::NOTHING) &&
+			(bas == Enum_type_dungeon_generator::NOTHING) &&
+			(gauche == Enum_type_dungeon_generator::NOTHING))
 		{
-			return 37;
+			list.push_back(37);
 		}
-		if ((HG == Enum_type_dungeon_generator::NOTHING) &&
-			(HD != Enum_type_dungeon_generator::NOTHING) &&
-			(BG == Enum_type_dungeon_generator::NOTHING) &&
-			(BD == Enum_type_dungeon_generator::NOTHING))
+		if ((HD != Enum_type_dungeon_generator::NOTHING) &&
+			(haut == Enum_type_dungeon_generator::NOTHING) &&
+			(droite == Enum_type_dungeon_generator::NOTHING))
 		{
-			return 0;
+			list.push_back(18);
 		}
 		if ((HG != Enum_type_dungeon_generator::NOTHING) &&
-			(HD == Enum_type_dungeon_generator::NOTHING) &&
-			(BG == Enum_type_dungeon_generator::NOTHING) &&
-			(BD == Enum_type_dungeon_generator::NOTHING))
+			(haut == Enum_type_dungeon_generator::NOTHING) &&
+			(gauche == Enum_type_dungeon_generator::NOTHING))
+		
 		{
-			return 0;
+			list.push_back(17);
 		}
 	}
-	return 0;
+	return list;
 }
 int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
 {

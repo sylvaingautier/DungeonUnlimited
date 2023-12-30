@@ -39,12 +39,13 @@ public:
 
 	};
 
+
 public:
 	Block();
 	~Block();
 	int isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite);
 	raylib::Color getBlockType(long long centre);
-	int getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD);
+	std::vector<int> getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD, long long haut, long long bas, long long gauche, long long droite);
 	int getTilesetBlock(long long centre, long long haut, long long bas, long long gauche, long long droite);
 	int porte(long long haut, long long bas, long long gauche, long long droite);
 	int mur(long long haut, long long bas, long long gauche, long long droite);
@@ -53,4 +54,5 @@ public:
 	int sol(long long haut, long long bas, long long gauche, long long droite);
 	int vide(long long haut, long long bas, long long gauche, long long droite);
 };
+
 

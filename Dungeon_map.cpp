@@ -66,24 +66,32 @@ Dungeon_map::Dungeon_map()
     {
         for (int y = 1; y < (size_y-1); y++)
         {
-            int TypeBlock = m_Environnement.m_Block.getTilesetBlockDetail(
+            std::vector<int> TypeBlock = m_Environnement.m_Block.getTilesetBlockDetail(
                 d["cells"][y][x].GetInt64(),
                 d["cells"][y - 1][x - 1].GetInt64(),
                 d["cells"][y - 1][x + 1].GetInt64(),
                 d["cells"][y + 1][x - 1].GetInt64(),
-                d["cells"][y + 1][x + 1].GetInt64());
-            if (TypeBlock != 0)
+                d["cells"][y + 1][x + 1].GetInt64(),
+                d["cells"][y - 1][x].GetInt64(),
+                d["cells"][y + 1][x].GetInt64(),
+                d["cells"][y][x - 1].GetInt64(),
+                d["cells"][y][x + 1].GetInt64());
+            for (int block : TypeBlock)
             {
-                TilePosXY = m_Environnement.getTile(TypeBlock);
+                if (block != 0)
+                {
+                    TilePosXY = m_Environnement.getTile(block);
 
-                rectTile.x = TilePosXY.x;
-                rectTile.y = TilePosXY.y;
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
 
-                raylib::ImageDraw(&map[1], m_Environnement.m_Tileset,
-                    rectTile,
-                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                    raylib::WHITE);
+                    raylib::ImageDraw(&map[1], m_Environnement.m_Tileset,
+                        rectTile,
+                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                        raylib::WHITE);
+                }
             }
+
         }
 
     }
