@@ -88,18 +88,17 @@ void GameCore::loopGameCore()
             }
             if (raylib::IsKeyDown(raylib::KEY_LEFT))
             {
-                hero.m_HeroDir = 3;
+                hero.m_HeroDir = 4;
                 previousTime_Hero = currentTime;
             }
             if (raylib::IsKeyDown(raylib::KEY_RIGHT))
             {
-                hero.m_HeroDir = 4;
+                hero.m_HeroDir = 3;
                 previousTime_Hero = currentTime;
             }
         }
         else
         {
-            hero.m_AttackIndex = 0;
             if (raylib::IsKeyDown(raylib::KEY_UP))
             {
                 hero.m_HeroDir = 1;
@@ -117,14 +116,14 @@ void GameCore::loopGameCore()
             }
             if (raylib::IsKeyDown(raylib::KEY_LEFT))
             {
-                hero.m_HeroDir = 3;
+                hero.m_HeroDir = 4;
                 hero.m_HeroActionCourante = 1;
                 map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
                 previousTime_Hero = currentTime;
             }
             if (raylib::IsKeyDown(raylib::KEY_RIGHT))
             {
-                hero.m_HeroDir = 4;
+                hero.m_HeroDir = 3;
                 hero.m_HeroActionCourante = 1;
                 map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
                 previousTime_Hero = currentTime;
@@ -140,57 +139,43 @@ void GameCore::loopGameCore()
         {
             raylib::DrawTexture(texture2, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
             
-            switch (hero.m_HeroDir)
+            if (hero.m_HeroDir == 0)
             {
-                case 0:
-                    if ((currentTime - previousTime_HeroIdle) > hero.m_IdleTime)
-                    {
-                        hero.Idle();
-                        previousTime_HeroIdle = currentTime;
-                    }
-                    raylib::DrawTextureRec(texHero, hero.m_RecHero, hero.m_HeroPos, raylib::WHITE);
-                    break;
-                case 1: // haut
-                case 2: // Bas
-                case 3: // Gauche
-                    if ((currentTime - previousTime_HeroWalk) > hero.m_Time)
-                    {
-                        if (hero.m_HeroActionCourante == 2)
-                        {
-                            hero.m_HeroActionCourante=hero.Attack(hero.m_HeroDir);
-                            
-                        }
-                        if (hero.m_HeroActionCourante == 1)
-                        {
-                            hero.Walk(hero.m_HeroDir);
-                            hero.m_HeroActionCourante = 0;
-                        }
-                        previousTime_HeroWalk = currentTime;
-
-                    }
-                    raylib::DrawTextureRec( texHero_Flip_Horizontal, hero.m_RecHero, hero.m_HeroPos, raylib::WHITE);
-                    break;
-                case 4: //Droite
-                    if ((currentTime - previousTime_HeroWalk) > hero.m_Time)
-                    {
-                        if (hero.m_HeroActionCourante == 2)
-                        {
-                            hero.m_HeroActionCourante=hero.Attack(hero.m_HeroDir);
-                        }
-                        if (hero.m_HeroActionCourante == 1)
-                        {
-                            hero.Walk(hero.m_HeroDir);
-                            hero.m_HeroActionCourante = 0;
-                        }
-                        previousTime_HeroWalk = currentTime;
-
-                    }
-
-                    raylib::DrawTextureRec(texHero, hero.m_RecHero, hero.m_HeroPos, raylib::WHITE);
-                    break;
+                if ((currentTime - previousTime_HeroIdle) > hero.m_TimeWait)
+                {
+                    hero.Idle();
+                    previousTime_HeroIdle = currentTime;
+                }
+                raylib::DrawTextureRec(texHero, hero.m_RecHero, hero.m_HeroPos , raylib::WHITE);
             }
-        
-                     
+            else
+            {
+
+                if ((currentTime - previousTime_HeroWalk) > hero.m_TimeWait)
+                {
+                    if (hero.m_HeroActionCourante == 2)
+                    {
+                        hero.m_HeroActionCourante=hero.Attack(hero.m_HeroDir);
+                    }
+                    if (hero.m_HeroActionCourante == 1)
+                    {
+                        hero.Walk(hero.m_HeroDir);
+                        hero.m_HeroActionCourante = 0;
+                    }
+                    previousTime_HeroWalk = currentTime;
+                }
+                raylib::Vector2 Mvt = hero.m_MicroMvtHero;
+                Mvt.x += hero.m_HeroPos.x;
+                Mvt.y += hero.m_HeroPos.y;
+                if (hero.m_HeroDir == 4)
+                {
+                    raylib::DrawTextureRec(texHero_Flip_Horizontal, hero.m_RecHero, Mvt, raylib::WHITE);
+                }
+                else
+                {
+                    raylib::DrawTextureRec(texHero, hero.m_RecHero, Mvt, raylib::WHITE);
+                }
+            }
             raylib::DrawTexture(texture3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
         }
        

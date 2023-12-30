@@ -2,7 +2,7 @@
 namespace raylib {
 #include "raylib.h"
 }
-
+#include <vector>
 class Hero
 {
 public:
@@ -20,17 +20,67 @@ public:
 	int m_HeroActionCourante = 0; //0=Aucune action
 	int m_SpeedWalk=3;
 
-	int m_IdelIndex=0;
-	int m_IdelInc = 1;
-	float m_IdleTime = 0.640f;
-
-	int m_WalkIndex = 0;
-	int m_AttackIndex = 0;
-	int m_Inc = 1;
-
-	float m_Time = 0.100f;
-
+	float m_TimeWait = 0.100f;
+	raylib::Vector2 m_MicroMvtHero{};
 	raylib::Vector2 m_HeroPos{};
+
+	struct s_Hero
+	{
+		int IndexFrame;
+		int NbFrame;
+		std::vector<int> Frame;
+		std::vector<int> Frame_Inv;
+		std::vector<float>  TimeWait;
+		std::vector<int> Pos;
+
+		void IncIndexFrame() {
+			IndexFrame = (IndexFrame + 1) % NbFrame;
+		};
+		float GetTimeWait() {
+			return TimeWait.at(IndexFrame);
+		};
+		int GetFrame(bool Inv) {
+			if (Inv == false)
+			{
+				return Frame.at(IndexFrame);
+			}
+			else 
+			{
+				return Frame_Inv.at(IndexFrame);
+			}
+
+		};
+		raylib::Vector2 GetMicroMvtPos(int Dir) {
+			raylib::Vector2 RetourMicroMvtPos{};
+			switch (Dir)
+			{
+				case 1://Haut
+					RetourMicroMvtPos.x = 0;
+					RetourMicroMvtPos.y = -Pos.at(IndexFrame);
+					break;
+				case 2://Bas
+					RetourMicroMvtPos.x = 0;
+					RetourMicroMvtPos.y = Pos.at(IndexFrame);
+					break;
+				case 3://Droite
+					RetourMicroMvtPos.x = Pos.at(IndexFrame);
+					RetourMicroMvtPos.y = 0;
+					break;
+				case 4://Gauche
+					RetourMicroMvtPos.x = -Pos.at(IndexFrame);
+					RetourMicroMvtPos.y = 0;
+					break;
+
+
+			}
+			return RetourMicroMvtPos;
+		};
+	};
+
+	struct s_Hero m_Walk;
+	struct s_Hero m_Attack;
+	struct s_Hero m_Idle;
+
 
 public:
 	void Init();
