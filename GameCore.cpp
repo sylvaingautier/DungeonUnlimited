@@ -137,7 +137,7 @@ void GameCore::loopGameCore()
         // Gestion Des Collisions
         //----------------------------------------------------------------------------------
          
-        int index = ((map_pos_in_screen.y+ (SCREENHEIGHT/2)) * TheDungeon.sizeMapPixels_y) + (map_pos_in_screen.x+(SCREENWIDTH/2));
+        int index = ((hero.m_HeroPos.y - map_pos_in_screen.y + hero.m_HeroSize / 2) * TheDungeon.sizeMapPixels_x) + ((hero.m_HeroPos.x - map_pos_in_screen.x + hero.m_HeroSize / 2));
         raylib::Color pixel = TheDungeon.mapColorCollision[index];
 
 
@@ -145,7 +145,6 @@ void GameCore::loopGameCore()
         // Draw
         //----------------------------------------------------------------------------------
         raylib::BeginDrawing();
-       raylib::DrawText(raylib::TextFormat("%d", pixel.r), 20, 10, 10, raylib::WHITE);
         raylib::ClearBackground(raylib::BLACK);
         if (affiche_tileset == true)
         {
@@ -212,6 +211,10 @@ void GameCore::loopGameCore()
                }
            }
        }
+
+       raylib::DrawText(raylib::TextFormat("[%d]-%d = %f - %f ", pixel.g,index,(hero.m_HeroPos.x - map_pos_in_screen.x + hero.m_HeroSize / 2), (hero.m_HeroPos.y - map_pos_in_screen.y + hero.m_HeroSize / 2)), 20, 10, 10, raylib::WHITE);
+
+       //0 - 27
         raylib::EndDrawing();
     }
 }
