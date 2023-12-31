@@ -8,7 +8,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Pit of Bloody Terror 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Dark Crypts of the Lich Princess 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
@@ -25,7 +25,7 @@ Dungeon_map::Dungeon_map()
     map[1] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[2] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     mapCollision = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
-    mapColorCollision= raylib::LoadImageColors(mapCollision);
+
     raylib::Vector2 TileSizeXY;
     TileSizeXY.x = (float)m_Environnement.m_TileSize;
     TileSizeXY.y = (float)m_Environnement.m_TileSize;
@@ -280,7 +280,7 @@ Dungeon_map::Dungeon_map()
 
         }
     }
-
+    mapColorCollision = raylib::LoadImageColors(mapCollision);
 }
 
 void Dungeon_map::Init()
