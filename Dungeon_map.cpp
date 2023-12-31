@@ -19,11 +19,13 @@ Dungeon_map::Dungeon_map()
     d.ParseStream(isw);
     int size_y = d["cells"].Capacity();
     int size_x = d["cells"][0].Capacity();
+    sizeMapPixels_x = size_x * 48;
+    sizeMapPixels_y = size_y * 48;
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[1] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[2] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     mapCollision = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
-
+    mapColorCollision= raylib::LoadImageColors(mapCollision);
     raylib::Vector2 TileSizeXY;
     TileSizeXY.x = (float)m_Environnement.m_TileSize;
     TileSizeXY.y = (float)m_Environnement.m_TileSize;

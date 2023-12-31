@@ -63,4 +63,12 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\personnages\Link.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="Resources\environnements\tilset_1\tiles_dungeon_v1.1_48x48.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

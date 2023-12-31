@@ -148,6 +148,10 @@
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Randomer.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\environnements\tilset_1\tiles_dungeon_v1.1_48x48.png" />
+    <Image Include="Resources\personnages\Link.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

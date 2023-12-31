@@ -17,6 +17,9 @@ class Dungeon_map
 public:
 	raylib::Image map[4];
 	raylib::Image mapCollision;
+	raylib::Color* mapColorCollision;
+	int sizeMapPixels_x;
+	int sizeMapPixels_y;
 	Environnements m_Environnement;
 	struct s_liste_block
 	{

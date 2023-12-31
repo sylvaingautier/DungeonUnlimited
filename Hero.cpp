@@ -5,7 +5,7 @@
 void Hero::Init()
 {
 
-	m_HeroSet = raylib::LoadImage("Resources/environnements/tilset_1/chara_hero_48x48.png");     // Loaded in CPU memory (RAM)
+	m_HeroSet = raylib::LoadImage("Resources/personnages/chara_hero_48x48.png");     // Loaded in CPU memory (RAM)
 
 	if (m_HeroSet.height == 0)
 	{
