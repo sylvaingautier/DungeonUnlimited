@@ -137,15 +137,15 @@ void GameCore::loopGameCore()
         // Gestion Des Collisions
         //----------------------------------------------------------------------------------
          
-        int index = (map_pos_in_screen.y * TheDungeon.sizeMapPixels_y) + map_pos_in_screen.x;
+        int index = ((map_pos_in_screen.y+ (SCREENHEIGHT/2)) * TheDungeon.sizeMapPixels_y) + (map_pos_in_screen.x+(SCREENWIDTH/2));
         raylib::Color pixel = TheDungeon.mapColorCollision[index];
 
 
-        //----------------------------------------------------------------------------------
+        
         // Draw
         //----------------------------------------------------------------------------------
         raylib::BeginDrawing();
-        raylib::DrawText(raylib::TextFormat("%d", pixel.r), 20, 10, 10, raylib::WHITE);
+       raylib::DrawText(raylib::TextFormat("%d", pixel.r), 20, 10, 10, raylib::WHITE);
         raylib::ClearBackground(raylib::BLACK);
         if (affiche_tileset == true)
         {
