@@ -15,10 +15,16 @@ class Dungeon_map
 {
 
 public:
+	struct s_Collision_Block
+	{
+		raylib::BoundingBox Box;
+		int Type; //0=mur ==> pas de id
+		          //1=block qui peut disparaitre de la liste ==> id= y*size_x + x
+		int Id;
+
+	};
 	raylib::Image map[4];
-	raylib::Image mapCollision;
-	raylib::Color* mapColorCollision;
-	std::vector < raylib::BoundingBox> CollisionMap;
+	std::vector < struct s_Collision_Block> CollisionMap;
 	int sizeMapPixels_x;
 	int sizeMapPixels_y;
 	Environnements m_Environnement;
@@ -33,5 +39,6 @@ public:
 	void Init();
 	void LoadSprites();
 	~Dungeon_map();
+	bool isCollisionMap(raylib::BoundingBox hero);
 
 };

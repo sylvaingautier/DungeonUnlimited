@@ -24,7 +24,7 @@ Dungeon_map::Dungeon_map()
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[1] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
     map[2] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
-    mapCollision = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
+    map[3] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
 
     raylib::Vector2 TileSizeXY;
     TileSizeXY.x = (float)m_Environnement.m_TileSize;
@@ -58,16 +58,19 @@ Dungeon_map::Dungeon_map()
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::WHITE);
             //CollisionMap
-            raylib::BoundingBox Box{};
-            Box.min.x = (float)(x * m_Environnement.m_TileSize);
-            Box.min.y = (float)(y * m_Environnement.m_TileSize);
-            Box.min.z = 0;
-            Box.max.x = (float)(x * m_Environnement.m_TileSize) + TileSizeXY.x;
-            Box.max.y = (float)(y * m_Environnement.m_TileSize) + TileSizeXY.y;
-            Box.max.z = 0;
-            CollisionMap.push_back(Box);
+            struct s_Collision_Block Block{};
+            Block.Box.min.x = (float)(x * m_Environnement.m_TileSize);
+            Block.Box.min.y = (float)(y * m_Environnement.m_TileSize);
+            Block.Box.min.z = 0;
+            Block.Box.max.x = (float)(x * m_Environnement.m_TileSize) + TileSizeXY.x;
+            Block.Box.max.y = (float)(y * m_Environnement.m_TileSize) + TileSizeXY.y;
+            Block.Box.max.z = 0;
+            if (m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()) != 0)
+            {
+                CollisionMap.push_back(Block);
+            }
 
-            raylib::ImageDrawRectangle(&mapCollision, x * m_Environnement.m_TileSize, y * m_Environnement.m_TileSize, TileSizeXY.x, TileSizeXY.y, m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()));       // Draw rectangle within an image
+            //raylib::ImageDrawRectangle(&mapCollision, x * m_Environnement.m_TileSize, y * m_Environnement.m_TileSize, TileSizeXY.x, TileSizeXY.y, m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()));       // Draw rectangle within an image
 
         }
     }
@@ -289,9 +292,93 @@ Dungeon_map::Dungeon_map()
 
         }
     }
-    mapColorCollision = raylib::LoadImageColors(mapCollision);
+    //Couche N°3 (ouverture(Arche))
+    for (int x = 0; x < size_x; x++)
+    {
+        for (int y = 0; y < size_y; y++)
+        {
+
+            int type_ouverture = m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
+                (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
+                (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
+                (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
+                (x == (size_x - 1)) ? 0 : d["cells"][y][x + 1].GetInt64());
+
+            switch (type_ouverture)
+            {
+            case 3: // Arch Horizontal
+                // 6 x block
+                TilePosXY = m_Environnement.getTile(240);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x - 1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(260);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x - 1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+
+                TilePosXY = m_Environnement.getTile(241);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(261);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(242);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(262);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[3], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+ 
+            }
+
+
+        }
+    }
+
 }
 
+bool Dungeon_map::isCollisionMap(raylib::BoundingBox hero)
+{
+
+    for (raylib::BoundingBox box : CollisionMap)
+    {
+        if (raylib::CheckCollisionBoxes(box, hero) == true)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 void Dungeon_map::Init()
 {
 }

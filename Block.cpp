@@ -84,48 +84,48 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 int Block::getBlockType(long long centre)
 {
 	//raylib::Color returnColor{};
-	int returnColor;
-	returnColor = { 255,0,0,255 };
+	int returnColor=0;
+	//returnColor = { 255,0,0,255 };
 	
 	if ((centre & Enum_type_dungeon_generator::NOTHING) == Enum_type_dungeon_generator::NOTHING)
 	{
 		//TileSet Vide
-		returnColor = { 0,0,0 ,255 };
+		returnColor = 0;
 	}
 	if ((centre & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR)
 	{
 		//TileSet Sol
-		returnColor = { 255,0,0 ,255 };
+		returnColor = 0;
 	}
 	if ((centre & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM)
 	{
 		//TileSet Sol
-		returnColor = { 128,0,0 ,255 };
+		returnColor = 0;
 	}
 	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
 	{
 		//TileSet Mur
-		 returnColor = { 0,255,0,255 };
+		returnColor = 3;
 	}
 	// Porte Horizontal
 	if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
 	{
-		returnColor = { 0,0,255,255 };
+		returnColor = 4;
 	}
 	// Grille Horizontal
 	if ((centre & Enum_type_dungeon_generator::PORTC) == Enum_type_dungeon_generator::PORTC)
 	{
-		returnColor = { 0,0,255,255 };
+		returnColor = 0;
 	}
 	// Porte Horizontal Lock
 	if ((centre & Enum_type_dungeon_generator::LOCKED) == Enum_type_dungeon_generator::LOCKED)
 	{
-		returnColor = { 0,0,128,255 };
+		returnColor = 5;
 	}
 	// Porte Horizontal blocké Lock
 	if ((centre & Enum_type_dungeon_generator::SECRET) == Enum_type_dungeon_generator::SECRET)
 	{
-		returnColor = { 0,0,64,255 };
+		returnColor = 6;
 	}
 	return returnColor;
 }

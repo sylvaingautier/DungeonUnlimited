@@ -1,4 +1,70 @@
-﻿  Dungeon_map.cpp
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(69,143): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(69,129): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+﻿  GameCore.cpp
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(189,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(189,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(190,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(190,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(191,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(191,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(228,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(228,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(39,23): warning C4101: 'texmapCollision' : variable locale non référencée
+  main.cpp
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(59,28): warning C4244:         ]
+  (compiler le fichier source 'main.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(63,34): warning C4244:         ]
+  (compiler le fichier source 'main.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(66,34): warning C4244:         ]
+  (compiler le fichier source 'main.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(70,28): warning C4244:         ]
+  (compiler le fichier source 'main.cpp')
+  
+C:\DevCpp\DungeonUnlimited\main.cpp(6,1): warning C4326: le type de retour de 'main' doit être 'int' au lieu de 'void'
+  Génération de code en cours...
   DungeonUnlimited.vcxproj -> C:\DevCpp\DungeonUnlimited\x64\Debug\DungeonUnlimited.exe
