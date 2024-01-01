@@ -81,10 +81,12 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 	return 0;
 	
 }
-raylib::Color Block::getBlockType(long long centre)
+int Block::getBlockType(long long centre)
 {
-	raylib::Color returnColor{};
+	//raylib::Color returnColor{};
+	int returnColor;
 	returnColor = { 255,0,0,255 };
+	
 	if ((centre & Enum_type_dungeon_generator::NOTHING) == Enum_type_dungeon_generator::NOTHING)
 	{
 		//TileSet Vide

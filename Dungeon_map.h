@@ -18,6 +18,7 @@ public:
 	raylib::Image map[4];
 	raylib::Image mapCollision;
 	raylib::Color* mapColorCollision;
+	std::vector < raylib::BoundingBox> CollisionMap;
 	int sizeMapPixels_x;
 	int sizeMapPixels_y;
 	Environnements m_Environnement;

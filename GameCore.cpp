@@ -39,6 +39,9 @@ void GameCore::loopGameCore()
     raylib::Vector2 map_pos_in_screen{};
     map_pos_in_screen.x = 0;
     map_pos_in_screen.y = 0;
+    raylib::Vector2 map_pos_in_screen_prec{};
+    map_pos_in_screen_prec.x = 0;
+    map_pos_in_screen_prec.y = 0;
     texHero= LoadTextureFromImage(hero.m_HeroSet);
     texHero_Flip_Horizontal = LoadTextureFromImage(hero.m_HeroSet_Flip_Horizontal);
     texTileSet = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);
@@ -51,8 +54,11 @@ void GameCore::loopGameCore()
     double previousTime_HeroIdle = raylib::GetTime();
     double previousTime_HeroWalk = raylib::GetTime();
     double currentTime = 0.0;           // Current time measure
-
-
+    raylib::Color pixel;
+    raylib::Vector2  PointHG_Collision;
+    raylib::Vector2  PointHD_Collision;
+    raylib::Vector2  PointBG_Collision;
+    raylib::Vector2  PointBD_Collision;
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         currentTime = raylib::GetTime();
@@ -103,11 +109,24 @@ void GameCore::loopGameCore()
         }
         else
         {
+            map_pos_in_screen_prec = map_pos_in_screen;
+
             if (raylib::IsKeyDown(raylib::KEY_UP))
             {
                 hero.m_HeroDir = 1;
                 hero.m_HeroActionCourante = 1;
-                map_pos_in_screen.y = map_pos_in_screen.y + hero.m_SpeedWalk;
+
+                PointHG_Collision.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                PointHG_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
+
+                PointBD_Collision.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) + 22;
+                PointBD_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) + 22;
+                
+                   
+                if (TheDungeon.mapColorCollision[int((PointHG_Collision.y* TheDungeon.sizeMapPixels_x)+ PointHG_Collision.x) ].g == 0 && TheDungeon.mapColorCollision[int((PointBD_Collision.y * TheDungeon.sizeMapPixels_x) + PointBD_Collision.x)].g == 0)
+                {
+                    map_pos_in_screen.y = map_pos_in_screen.y + hero.m_SpeedWalk;
+                }
                 previousTime_Hero = currentTime;
 
             }
@@ -115,30 +134,55 @@ void GameCore::loopGameCore()
             {
                 hero.m_HeroDir = 2;
                 hero.m_HeroActionCourante = 1;
-                map_pos_in_screen.y = map_pos_in_screen.y - hero.m_SpeedWalk;
+                PointHG_Collision.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                PointHG_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
+
+                PointBD_Collision.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) + 22;
+                PointBD_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) + 22;
+
+
+                if (TheDungeon.mapColorCollision[int((PointHG_Collision.y * TheDungeon.sizeMapPixels_x) + PointHG_Collision.x)].g == 0 && TheDungeon.mapColorCollision[int((PointBD_Collision.y * TheDungeon.sizeMapPixels_x) + PointBD_Collision.x)].g == 0)
+                {
+                    map_pos_in_screen.y = map_pos_in_screen.y - hero.m_SpeedWalk;
+                }
                 previousTime_Hero = currentTime;
             }
             if (raylib::IsKeyDown(raylib::KEY_LEFT))
             {
                 hero.m_HeroDir = 4;
                 hero.m_HeroActionCourante = 1;
-                map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
+                PointHG_Collision.x = hero.m_HeroPos.x - (map_pos_in_screen.x+ hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                PointHG_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y ) + (hero.m_HeroSize / 2);
+
+                PointBD_Collision.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) + 22;
+                PointBD_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y ) + (hero.m_HeroSize / 2) + 22;
+
+
+                if (TheDungeon.mapColorCollision[int((PointHG_Collision.y * TheDungeon.sizeMapPixels_x) + PointHG_Collision.x)].g == 0 && TheDungeon.mapColorCollision[int((PointBD_Collision.y * TheDungeon.sizeMapPixels_x) + PointBD_Collision.x)].g == 0)
+                {
+                    map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
+                }
+                
                 previousTime_Hero = currentTime;
             }
             if (raylib::IsKeyDown(raylib::KEY_RIGHT))
             {
                 hero.m_HeroDir = 3;
                 hero.m_HeroActionCourante = 1;
-                map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
+                PointHG_Collision.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                PointHG_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
+
+                PointBD_Collision.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) + 22;
+                PointBD_Collision.y = hero.m_HeroPos.y - (map_pos_in_screen.y ) + (hero.m_HeroSize / 2) + 22;
+
+
+                if (TheDungeon.mapColorCollision[int((PointHG_Collision.y * TheDungeon.sizeMapPixels_x) + PointHG_Collision.x)].g == 0 && TheDungeon.mapColorCollision[int((PointBD_Collision.y * TheDungeon.sizeMapPixels_x) + PointBD_Collision.x)].g == 0)
+                {
+                    map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
+                }
                 previousTime_Hero = currentTime;
             }
         }
-        //----------------------------------------------------------------------------------
-        // Gestion Des Collisions
-        //----------------------------------------------------------------------------------
-         
-        int index = ((hero.m_HeroPos.y - map_pos_in_screen.y + hero.m_HeroSize / 2) * TheDungeon.sizeMapPixels_x) + ((hero.m_HeroPos.x - map_pos_in_screen.x + hero.m_HeroSize / 2));
-        raylib::Color pixel = TheDungeon.mapColorCollision[index];
 
 
         
@@ -212,7 +256,12 @@ void GameCore::loopGameCore()
            }
        }
 
-       raylib::DrawText(raylib::TextFormat("[%d]-%d = %f - %f ", pixel.g,index,(hero.m_HeroPos.x - map_pos_in_screen.x + hero.m_HeroSize / 2), (hero.m_HeroPos.y - map_pos_in_screen.y + hero.m_HeroSize / 2)), 20, 10, 10, raylib::WHITE);
+       PointHG_Collision.x = hero.m_HeroPos.x + (hero.m_HeroSize / 2) - 24;
+       PointHG_Collision.y = hero.m_HeroPos.y + (hero.m_HeroSize / 2);
+
+       raylib::DrawRectangleLines(PointHG_Collision.x, PointHG_Collision.y, 48, 24, raylib::RED);
+
+      // raylib::DrawText(raylib::TextFormat("[%d]-%d = %f - %f ", pixel.g,index,(hero.m_HeroPos.x - map_pos_in_screen.x + hero.m_HeroSize / 2), (hero.m_HeroPos.y - map_pos_in_screen.y + hero.m_HeroSize / 2)), 20, 10, 10, raylib::WHITE);
 
        //0 - 27
         raylib::EndDrawing();

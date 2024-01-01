@@ -8,7 +8,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Dark Crypts of the Lich Princess 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Tunnels of Shiva the Destroyer 02.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
@@ -57,6 +57,15 @@ Dungeon_map::Dungeon_map()
                 rectTile,
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::WHITE);
+            //CollisionMap
+            raylib::BoundingBox Box{};
+            Box.min.x = (float)(x * m_Environnement.m_TileSize);
+            Box.min.y = (float)(y * m_Environnement.m_TileSize);
+            Box.min.z = 0;
+            Box.max.x = (float)(x * m_Environnement.m_TileSize) + TileSizeXY.x;
+            Box.max.y = (float)(y * m_Environnement.m_TileSize) + TileSizeXY.y;
+            Box.max.z = 0;
+            CollisionMap.push_back(Box);
 
             raylib::ImageDrawRectangle(&mapCollision, x * m_Environnement.m_TileSize, y * m_Environnement.m_TileSize, TileSizeXY.x, TileSizeXY.y, m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()));       // Draw rectangle within an image
 
