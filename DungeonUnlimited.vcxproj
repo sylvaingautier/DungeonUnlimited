@@ -150,7 +150,14 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Resources\environnements\tilset_1\tiles_dungeon_v1.1_48x48.png" />
+    <Image Include="Resources\personnages\chara_hero_48x48.png" />
     <Image Include="Resources\personnages\Link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.json" />
+    <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.pdf" />
+    <None Include="Resources\donjon\The Pit of Beru 01.json" />
+    <None Include="Resources\donjon\The Pit of Bloody Terror 01.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

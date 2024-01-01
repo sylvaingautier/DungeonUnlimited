@@ -70,5 +70,22 @@
     <Image Include="Resources\environnements\tilset_1\tiles_dungeon_v1.1_48x48.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="Resources\personnages\chara_hero_48x48.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.json">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.pdf">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="Resources\donjon\The Pit of Beru 01.json">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="Resources\donjon\The Pit of Bloody Terror 01.json">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
   </ItemGroup>
 </Project>
