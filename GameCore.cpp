@@ -52,9 +52,8 @@ void GameCore::loopGameCore()
     double previousTime_HeroIdle = raylib::GetTime();
     double previousTime_HeroWalk = raylib::GetTime();
     double currentTime = 0.0;           // Current time measure
-    raylib::BoundingBox heroBB{};
-    heroBB.min.z = 0;
-    heroBB.max.z = 0;
+    Environnements::s_Collision_Block Collbox;
+    raylib::Rectangle heroBB{};
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         currentTime = raylib::GetTime();
@@ -112,12 +111,12 @@ void GameCore::loopGameCore()
                 hero.m_HeroDir = 1;
                 hero.m_HeroActionCourante = 1;
 
-                heroBB.min.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
-                heroBB.min.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                heroBB.max.x = heroBB.min.x + 44;
-                heroBB.max.y = heroBB.min.y + 22;
+                heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
+                heroBB.width =  44;
+                heroBB.height =  22;
 
-                if (TheDungeon.isCollisionMap(heroBB) == false)
+                if (TheDungeon.isCollisionMap(heroBB,Collbox) == false)
                 {
                     map_pos_in_screen.y = map_pos_in_screen.y + hero.m_SpeedWalk;
                 }
@@ -128,12 +127,13 @@ void GameCore::loopGameCore()
             {
                 hero.m_HeroDir = 2;
                 hero.m_HeroActionCourante = 1;
-                heroBB.min.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
-                heroBB.min.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                heroBB.max.x = heroBB.min.x + 44;
-                heroBB.max.y = heroBB.min.y + 22;
+                heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
+                heroBB.width =  44;
+                heroBB.height =  22;
 
-                if (TheDungeon.isCollisionMap(heroBB) == false) {
+                if (TheDungeon.isCollisionMap(heroBB, Collbox) == false)
+                {
                     map_pos_in_screen.y = map_pos_in_screen.y - hero.m_SpeedWalk;
                 }
                 previousTime_Hero = currentTime;
@@ -142,12 +142,13 @@ void GameCore::loopGameCore()
             {
                 hero.m_HeroDir = 4;
                 hero.m_HeroActionCourante = 1;
-                heroBB.min.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
-                heroBB.min.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                heroBB.max.x = heroBB.min.x + 44;
-                heroBB.max.y = heroBB.min.y + 22;
+                heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
+                heroBB.width =  44;
+                heroBB.height =  22;
 
-                if (TheDungeon.isCollisionMap(heroBB) == false) {
+                if (TheDungeon.isCollisionMap(heroBB, Collbox) == false)
+                {
                     map_pos_in_screen.x = map_pos_in_screen.x + hero.m_SpeedWalk;
                 }
 
@@ -157,12 +158,13 @@ void GameCore::loopGameCore()
             {
                 hero.m_HeroDir = 3;
                 hero.m_HeroActionCourante = 1;
-                heroBB.min.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
-                heroBB.min.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                heroBB.max.x = heroBB.min.x + 44;
-                heroBB.max.y = heroBB.min.y + 22;
+                heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
+                heroBB.width =  44;
+                heroBB.height =  22;
 
-                if (TheDungeon.isCollisionMap(heroBB) == false) {
+                if (TheDungeon.isCollisionMap(heroBB, Collbox) == false)
+                {
                     {
                         map_pos_in_screen.x = map_pos_in_screen.x - hero.m_SpeedWalk;
                     }

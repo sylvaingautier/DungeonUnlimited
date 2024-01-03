@@ -58,13 +58,11 @@ Dungeon_map::Dungeon_map()
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::WHITE);
             //CollisionMap
-            struct s_Collision_Block Block{};
-            Block.Box.min.x = (float)(x * m_Environnement.m_TileSize);
-            Block.Box.min.y = (float)(y * m_Environnement.m_TileSize);
-            Block.Box.min.z = 0;
-            Block.Box.max.x = (float)(x * m_Environnement.m_TileSize) + TileSizeXY.x;
-            Block.Box.max.y = (float)(y * m_Environnement.m_TileSize) + TileSizeXY.y;
-            Block.Box.max.z = 0;
+            Environnements::s_Collision_Block Block;
+            Block.Box.x = (float)(x * m_Environnement.m_TileSize);
+            Block.Box.y = (float)(y * m_Environnement.m_TileSize);
+            Block.Box.width =  TileSizeXY.x;
+            Block.Box.height =  TileSizeXY.y;
             if (m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()) != 0)
             {
                 CollisionMap.push_back(Block);
@@ -367,13 +365,13 @@ Dungeon_map::Dungeon_map()
 
 }
 
-bool Dungeon_map::isCollisionMap(raylib::BoundingBox hero)
+bool Dungeon_map::isCollisionMap(raylib::Rectangle hero, Environnements::s_Collision_Block &Collbox)
 {
-
-    for (raylib::BoundingBox box : CollisionMap)
+    for (Environnements::s_Collision_Block box : CollisionMap)
     {
-        if (raylib::CheckCollisionBoxes(box, hero) == true)
+        if (raylib::CheckCollisionRecs(hero,box.Box) == true)
         {
+            Collbox = box;
             return true;
         }
     }
