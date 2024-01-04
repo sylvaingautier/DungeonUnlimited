@@ -78,7 +78,12 @@ int Block::isDoor(long long centre, long long haut, long long bas, long long gau
 			return 15;
 		}
 	}
-	return 0;
+	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
+	{
+		//TileSet Mur
+		return  0;
+	}
+	return -1;
 	
 }
 int Block::getBlockType(long long centre)
@@ -105,27 +110,27 @@ int Block::getBlockType(long long centre)
 	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
 	{
 		//TileSet Mur
-		returnColor = 3;
+		returnColor = 1;
 	}
 	// Porte Horizontal
 	if ((centre & Enum_type_dungeon_generator::DOOR) == Enum_type_dungeon_generator::DOOR)
 	{
-		returnColor = 4;
+		returnColor = 2;
 	}
 	// Grille Horizontal
 	if ((centre & Enum_type_dungeon_generator::PORTC) == Enum_type_dungeon_generator::PORTC)
 	{
-		returnColor = 0;
+		returnColor = 2;
 	}
 	// Porte Horizontal Lock
 	if ((centre & Enum_type_dungeon_generator::LOCKED) == Enum_type_dungeon_generator::LOCKED)
 	{
-		returnColor = 5;
+		returnColor = 3;
 	}
 	// Porte Horizontal blocké Lock
 	if ((centre & Enum_type_dungeon_generator::SECRET) == Enum_type_dungeon_generator::SECRET)
 	{
-		returnColor = 6;
+		returnColor = 4;
 	}
 	return returnColor;
 }

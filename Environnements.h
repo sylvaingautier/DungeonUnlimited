@@ -18,8 +18,10 @@ public:
 	{
 		raylib::Rectangle Box;
 		int Type; //0=mur ==> pas de id
-		//1=block qui peut disparaitre de la liste ==> id= y*size_x + x
-		int Id;   //==> si Type=1 alors id= y*size_x + x
+				  //1=porte // grille sans clé
+		          //2=porte à verou 
+		int x;
+		int y;   
 
 	};
 

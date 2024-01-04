@@ -20,6 +20,8 @@ public:
 	std::vector <Environnements::s_Collision_Block> CollisionMap;
 	int sizeMapPixels_x;
 	int sizeMapPixels_y;
+	int size_y;
+	int size_x;
 	Environnements m_Environnement;
 	struct s_liste_block
 	{
@@ -31,6 +33,7 @@ public:
 	Dungeon_map();
 	bool isCollisionMap(raylib::Rectangle hero, Environnements::s_Collision_Block& Collbox);
 	void Init();
+	void drawElementsSupp();
 	void LoadSprites();
 	~Dungeon_map();
 

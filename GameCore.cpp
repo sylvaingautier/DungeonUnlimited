@@ -45,7 +45,7 @@ void GameCore::loopGameCore()
     texTileSet = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);
     texMap0 = LoadTextureFromImage(TheDungeon.map[0]);
     texMap1 = LoadTextureFromImage(TheDungeon.map[1]);
-    texMap2 = LoadTextureFromImage(TheDungeon.map[2]);
+    //texMap2 = LoadTextureFromImage(TheDungeon.map[2]);
     texMap3 = LoadTextureFromImage(TheDungeon.map[3]);
     // Custom timming variables
     double previousTime_Hero = raylib::GetTime();
@@ -54,6 +54,15 @@ void GameCore::loopGameCore()
     double currentTime = 0.0;           // Current time measure
     Environnements::s_Collision_Block Collbox;
     raylib::Rectangle heroBB{};
+    raylib::Vector2 TileSizeXY{};
+    TileSizeXY.x = (float)TheDungeon.m_Environnement.m_TileSize;
+    TileSizeXY.y = (float)TheDungeon.m_Environnement.m_TileSize;
+    raylib::Vector2 TilePosXY;
+    TilePosXY.x = 0;
+    TilePosXY.y = 0;
+    raylib::Rectangle rectTile{};
+    rectTile.height = TileSizeXY.x;
+    rectTile.width = TileSizeXY.y;
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
         currentTime = raylib::GetTime();
@@ -188,9 +197,87 @@ void GameCore::loopGameCore()
         }
         else
         {
+            // sol + mur
             raylib::DrawTexture(texMap0, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+            // detail sol
             raylib::DrawTexture(texMap1, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
-            raylib::DrawTexture(texMap2, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+            // porte + grille
+
+            for (Environnements::s_Collision_Block box : TheDungeon.CollisionMap)
+            {
+                switch (box.Type)
+                {
+                case 1: // Porte Horizontal
+                    // 1 x block
+                    TilePosXY = TheDungeon.m_Environnement.getTile(237);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                    break;
+                case 2: // Grille Horizontal
+                    // 1 x block
+                    TilePosXY = TheDungeon.m_Environnement.getTile(214);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                    break;
+                case 4: // Porte Horizontal Lock
+                    // 1 x block
+                    TilePosXY = TheDungeon.m_Environnement.getTile(234);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+
+                    break;
+                case 5: // Porte Horizontal Blocké
+                    // 1 x block
+                    TilePosXY = TheDungeon.m_Environnement.getTile(288);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+
+                    break;
+                case 11: // Porte  Verttical
+                    // 2 x blocks
+                    TilePosXY = TheDungeon.m_Environnement.getTile(218);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + ((box.y-1) * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+
+
+                    TilePosXY = TheDungeon.m_Environnement.getTile(238);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                    break;
+                case 12: // Grille  Verttical
+                    // 2 x blocks
+                    TilePosXY = TheDungeon.m_Environnement.getTile(216);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + ((box.y-1) * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                    TilePosXY = TheDungeon.m_Environnement.getTile(236);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                case 15: // Porte Verttical Blocké
+                    // 1 x block
+                    TilePosXY = TheDungeon.m_Environnement.getTile(288);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+                    break;
+                    break;
+                }
+            }
+
+
+
+
             if (hero.m_HeroDir == 0)
             {
                 if ((currentTime - previousTime_HeroIdle) > hero.m_TimeWait)

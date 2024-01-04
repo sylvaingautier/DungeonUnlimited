@@ -17,8 +17,8 @@ Dungeon_map::Dungeon_map()
 
     IStreamWrapper isw{ ifs };
     d.ParseStream(isw);
-    int size_y = d["cells"].Capacity();
-    int size_x = d["cells"][0].Capacity();
+    size_y = d["cells"].Capacity();
+    size_x = d["cells"][0].Capacity();
     sizeMapPixels_x = size_x * 48;
     sizeMapPixels_y = size_y * 48;
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
@@ -38,7 +38,7 @@ Dungeon_map::Dungeon_map()
     rectTile.height = TileSizeXY.x;
     rectTile.width = TileSizeXY.y;
 
-    //Couche N°0 (Couche Fixe)
+    //Couche N°0 (Couche Fixe) mur + sol
     for (int x = 0; x < size_x; x++)
     {
         for (int y = 0; y < size_y; y++)
@@ -57,22 +57,28 @@ Dungeon_map::Dungeon_map()
                 rectTile,
                 raylib::Rectangle{ (float)(x* m_Environnement.m_TileSize), (float)(y* m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
                 raylib::WHITE);
+
             //CollisionMap
             Environnements::s_Collision_Block Block;
             Block.Box.x = (float)(x * m_Environnement.m_TileSize);
             Block.Box.y = (float)(y * m_Environnement.m_TileSize);
             Block.Box.width =  TileSizeXY.x;
             Block.Box.height =  TileSizeXY.y;
-            if (m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()) != 0)
+            Block.Type = m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
+                (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
+                (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
+                (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
+                (x == (size_x - 1)) ? 0 : d["cells"][y][x + 1].GetInt64());
+            Block.x =  x;
+            Block.y = y;
+            if (Block.Type >= 0)
             {
                 CollisionMap.push_back(Block);
             }
 
-            //raylib::ImageDrawRectangle(&mapCollision, x * m_Environnement.m_TileSize, y * m_Environnement.m_TileSize, TileSizeXY.x, TileSizeXY.y, m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64()));       // Draw rectangle within an image
-
         }
     }
-    //Couche N°1 (Details Couche Fixe)
+    //Couche N°1 (Details Couche Fixe) mur + sol
     // Detail N°1 : ajout des coins des bordures
     for (int x = 1; x < (size_x-1); x++)
     {
@@ -107,189 +113,7 @@ Dungeon_map::Dungeon_map()
         }
 
     }
-    //Couche N°2 (ouverture(Porte/Grille/Arche))
-    for (int x = 0; x < size_x; x++)
-    {
-        for (int y = 0; y < size_y; y++)
-        {
-            
-            int type_ouverture=m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
-                (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
-                (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
-                (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
-                (x == (size_x - 1)) ? 0 : d["cells"][y][x + 1].GetInt64());
-            
-            switch (type_ouverture)
-            {
-                case 1: // Porte Horizontal
-                    // 1 x block
-                    TilePosXY = m_Environnement.getTile(237);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 2: // Grille Horizontal
-                    // 1 x block
-                    TilePosXY = m_Environnement.getTile(214);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 3: // Arch Horizontal
-                    // 6 x block
-                    TilePosXY = m_Environnement.getTile(240);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x-1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(260);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x-1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    
-                    TilePosXY = m_Environnement.getTile(241);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)((y-1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(261);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(242);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(262);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 4: // Porte Horizontal Lock
-                    // 1 x block
-                    TilePosXY = m_Environnement.getTile(234);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 5: // Porte Horizontal Blocké
-                    // 1 x block
-                    TilePosXY = m_Environnement.getTile(288);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 11: // Porte  Verttical
-                    // 2 x blocks
-                    TilePosXY = m_Environnement.getTile(218);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x) * m_Environnement.m_TileSize), (float)((y-1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(238);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 12: // Grille  Verttical
-                    // 2 x blocks
-                    TilePosXY = m_Environnement.getTile(216);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x)*m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(236);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 14: // Porte  Verttical Lock
-                    // 2 x blocks
-                    TilePosXY = m_Environnement.getTile(215);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)((x)*m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    TilePosXY = m_Environnement.getTile(235);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-                case 15: // Porte Verttical Blocké
-                    // 1 x block
-                    TilePosXY = m_Environnement.getTile(288);
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
-
-                    raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
-                    break;
-            }
-
-
-        }
-    }
+ 
     //Couche N°3 (ouverture(Arche))
     for (int x = 0; x < size_x; x++)
     {
@@ -369,10 +193,13 @@ bool Dungeon_map::isCollisionMap(raylib::Rectangle hero, Environnements::s_Colli
 {
     for (Environnements::s_Collision_Block box : CollisionMap)
     {
-        if (raylib::CheckCollisionRecs(hero,box.Box) == true)
+        if (box.Type != 3) // 3 = Arch ==> l'arch n'est pas un mur
         {
-            Collbox = box;
-            return true;
+            if (raylib::CheckCollisionRecs(hero, box.Box) == true)
+            {
+                Collbox = box;
+                return true;
+            }
         }
     }
     return false;
@@ -381,6 +208,208 @@ void Dungeon_map::Init()
 {
 }
 
+
+void Dungeon_map::drawElementsSupp()
+{
+    raylib::ImageClearBackground(&map[2], raylib::BLANK);
+
+
+    raylib::Vector2 TileSizeXY;
+    TileSizeXY.x = (float)m_Environnement.m_TileSize;
+    TileSizeXY.y = (float)m_Environnement.m_TileSize;
+
+    raylib::Vector2 TilePosXY;
+    TilePosXY.x = 0;
+    TilePosXY.y = 0;
+
+    raylib::Rectangle rectTile{};
+    rectTile.height = TileSizeXY.x;
+    rectTile.width = TileSizeXY.y;
+
+    //Couche N°2 (ouverture(Porte/Grille/Arche))
+    for (int x = 0; x < size_x; x++)
+    {
+        for (int y = 0; y < size_y; y++)
+        {
+
+            int type_ouverture = m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
+                (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
+                (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
+                (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
+                (x == (size_x - 1)) ? 0 : d["cells"][y][x + 1].GetInt64());
+
+            switch (type_ouverture)
+            {
+            case 1: // Porte Horizontal
+                // 1 x block
+                TilePosXY = m_Environnement.getTile(237);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 2: // Grille Horizontal
+                // 1 x block
+                TilePosXY = m_Environnement.getTile(214);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 3: // Arch Horizontal
+                // 6 x block
+                TilePosXY = m_Environnement.getTile(240);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x - 1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(260);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x - 1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+
+                TilePosXY = m_Environnement.getTile(241);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(261);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(242);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(262);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x + 1) * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 4: // Porte Horizontal Lock
+                // 1 x block
+                TilePosXY = m_Environnement.getTile(234);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 5: // Porte Horizontal Blocké
+                // 1 x block
+                TilePosXY = m_Environnement.getTile(288);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 11: // Porte  Verttical
+                // 2 x blocks
+                TilePosXY = m_Environnement.getTile(218);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x)*m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(238);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 12: // Grille  Verttical
+                // 2 x blocks
+                TilePosXY = m_Environnement.getTile(216);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x)*m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(236);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 14: // Porte  Verttical Lock
+                // 2 x blocks
+                TilePosXY = m_Environnement.getTile(215);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)((x)*m_Environnement.m_TileSize), (float)((y - 1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                TilePosXY = m_Environnement.getTile(235);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            case 15: // Porte Verttical Blocké
+                // 1 x block
+                TilePosXY = m_Environnement.getTile(288);
+                rectTile.x = TilePosXY.x;
+                rectTile.y = TilePosXY.y;
+
+                raylib::ImageDraw(&map[2], m_Environnement.m_Tileset,
+                    rectTile,
+                    raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                    raylib::WHITE);
+                break;
+            }
+
+
+        }
+    }
+}
 void Dungeon_map::LoadSprites()
 {
   
