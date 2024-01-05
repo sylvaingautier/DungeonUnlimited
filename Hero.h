@@ -80,12 +80,13 @@ public:
 	struct s_Hero m_Walk;
 	struct s_Hero m_Attack;
 	struct s_Hero m_Idle;
-
+	struct s_Hero m_Chute;
 
 public:
 	void Init();
 	void Idle();
 	void Walk(int dir);
 	int Attack(int dir);
+	int Chute(int dir);
 };
 

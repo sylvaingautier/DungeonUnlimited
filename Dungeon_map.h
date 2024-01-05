@@ -17,7 +17,9 @@ class Dungeon_map
 public:
 
 	raylib::Image map[4];
-	std::vector <Environnements::s_Collision_Block> CollisionMap;
+	raylib::Image PrecipiceMap;
+	raylib::Color* PrecipiceMapColor;
+	std::vector <Block_Interact> CollisionMap;
 	int sizeMapPixels_x;
 	int sizeMapPixels_y;
 	int size_y;
@@ -31,9 +33,8 @@ public:
 public:
 	rapidjson::Document d;
 	Dungeon_map();
-	bool isCollisionMap(raylib::Rectangle hero, Environnements::s_Collision_Block& Collbox);
+	bool isCollisionMap(raylib::Rectangle hero, Block_Interact& Collbox);
 	void Init();
-	void drawElementsSupp();
 	void LoadSprites();
 	~Dungeon_map();
 

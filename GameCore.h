@@ -22,6 +22,7 @@ public:
 	void initGameCore();
 	void endGameCore();
 	void loopGameCore();
-	
+	void MortDuHero(int type);
+
 };
 

@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Block_Interact.cpp" />
     <ClCompile Include="Dungeon_map.cpp" />
     <ClCompile Include="Environnements.cpp" />
     <ClCompile Include="GameCore.cpp" />
@@ -141,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Block_Interact.h" />
     <ClInclude Include="Dungeon_map.h" />
     <ClInclude Include="Environnements.h" />
     <ClInclude Include="GameCore.h" />

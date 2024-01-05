@@ -17,7 +17,7 @@ void Hero::Init()
 	raylib::ImageFlipHorizontal(&m_HeroSet_Flip_Horizontal);
 	m_HeroSize = 144;
 	m_SizeHeroSet_x = 4;
-	m_SizeHeroSet_y = 11;
+	m_SizeHeroSet_y = 14;
 	m_RecHero.height = m_HeroSize;
 	m_RecHero.width = m_HeroSize;
 
@@ -47,7 +47,13 @@ void Hero::Init()
 	m_Attack.TimeWait = { 0.300,0.100,0.100,0.300,0.080,0 };
 	m_Attack.Pos = { -2,+3,+3,+3,-1,0};
 
-	
+	// Initialisation des Structures pour la chute
+	m_Chute.IndexFrame = 0;
+	m_Chute.NbFrame = 4;
+	m_Chute.Frame = { 0,1,2,3 };
+	m_Chute.Frame_Inv = { 3,2,1,0 };
+	m_Chute.TimeWait = { 0.100,0.080,0.060,0.010};
+	m_Chute.Pos = { 10,15,20,30 };
 
 }
 void Hero::Idle()
@@ -119,3 +125,34 @@ int Hero::Attack(int dir)
 	}
 }
 
+int Hero::Chute(int dir)
+{
+	switch (dir)
+	{
+	case 1: //Haut
+		m_RecHero.x = m_Chute.GetFrame(false) * m_HeroSize;
+		m_RecHero.y = 11 * m_HeroSize;
+		break;
+	case 2: //Bas
+		m_RecHero.x = m_Chute.GetFrame(false) * m_HeroSize;
+		m_RecHero.y = 12 * m_HeroSize;
+		break;
+	case 3: //Droite
+		m_RecHero.x = m_Chute.GetFrame(false) * m_HeroSize;
+		m_RecHero.y = 13 * m_HeroSize;
+		break;
+	case 4: //Gauche
+		m_RecHero.x = m_Chute.GetFrame(true) * m_HeroSize;
+		m_RecHero.y = 13 * m_HeroSize;
+		break;
+	}
+
+	m_TimeWait = m_Chute.GetTimeWait();
+	m_MicroMvtHero = m_Chute.GetMicroMvtPos(dir);
+	m_Chute.IncIndexFrame();
+	if (m_Chute.IndexFrame == 0)
+	{
+		return 4;
+	}
+	return 3;
+}
