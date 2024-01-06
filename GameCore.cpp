@@ -15,7 +15,9 @@ void GameCore::initGameCore()
     hero.Init();
     hero.m_HeroPos.x = ((int((SCREENWIDTH  / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
     hero.m_HeroPos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
-
+    troll.Init();
+    troll.m_Pos.x = ((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
+    troll.m_Pos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
 }
 
 void GameCore::endGameCore()
@@ -26,9 +28,9 @@ void GameCore::endGameCore()
 void GameCore::loopGameCore()
 {
     // Main game loop
-    bool affiche_grille = true;
     bool affiche_tileset = false;
-    bool affiche_mapCollision = false;
+    bool affiche_Collision = false;
+    bool affiche_Collision_Box = false;
     raylib::Texture2D texTileSet;
     raylib::Texture2D texMap0;
     raylib::Texture2D texMap1;
@@ -66,19 +68,23 @@ void GameCore::loopGameCore()
     rectTile.height = TileSizeXY.x;
     rectTile.width = TileSizeXY.y;
     bool GameOver = false;
+    double Time_mvt_Etiquette_Sortie = 0;
+    int Index_mvt_Etiquette_Sortie = 0;
+    int mvt_Etiquette_Sortie[] = {-40,-39,-39,-38,-37,-37,-37,-38,-39,-39,-40,-40};
     while (!raylib::WindowShouldClose())    // Detect window close button or ESC key
     {
 
         //----------------------------------------------------------------------------------
         // GEstion des Inputs
         //----------------------------------------------------------------------------------
-        if (raylib::IsKeyDown(raylib::KEY_U)) affiche_grille = false;
-        if (raylib::IsKeyDown(raylib::KEY_J)) affiche_grille = true;
+        if (raylib::IsKeyDown(raylib::KEY_U)) affiche_Collision_Box = false;
+        if (raylib::IsKeyDown(raylib::KEY_J)) affiche_Collision_Box = true;
         if (raylib::IsKeyDown(raylib::KEY_O)) affiche_tileset = true;
         if (raylib::IsKeyDown(raylib::KEY_L)) affiche_tileset = false;
-        if (raylib::IsKeyDown(raylib::KEY_I)) affiche_mapCollision = true;
-        if (raylib::IsKeyDown(raylib::KEY_K)) affiche_mapCollision = false;
+        if (raylib::IsKeyDown(raylib::KEY_I)) affiche_Collision = true;
+        if (raylib::IsKeyDown(raylib::KEY_K)) affiche_Collision = false;
 
+        
         if (GameOver == false)
         {
             currentTime = raylib::GetTime();
@@ -124,31 +130,31 @@ void GameCore::loopGameCore()
                     hero.m_HeroActionCourante = 1;
                     if (hero.m_HeroDir == 1)
                     {
-                        heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                        heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x/2);
                         heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                        heroBB.width = 44;
-                        heroBB.height = 22;
+                        heroBB.width = hero.m_CollBoxHero.x;
+                        heroBB.height = hero.m_CollBoxHero.y;
                     }
                     if (hero.m_HeroDir == 2)
                     {
-                        heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                        heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                         heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                        heroBB.width = 44;
-                        heroBB.height = 22;
+                        heroBB.width = hero.m_CollBoxHero.x;
+                        heroBB.height = hero.m_CollBoxHero.y;
                     }
                     if (hero.m_HeroDir == 3)
                     {
-                        heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                        heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                         heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                        heroBB.width = 44;
-                        heroBB.height = 22;
+                        heroBB.width = hero.m_CollBoxHero.x;
+                        heroBB.height = hero.m_CollBoxHero.y;
                     }
                     if (hero.m_HeroDir == 4)
                     {
-                        heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                        heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                         heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                        heroBB.width = 44;
-                        heroBB.height = 22;
+                        heroBB.width = hero.m_CollBoxHero.x;
+                        heroBB.height = hero.m_CollBoxHero.y;
                     }
 
 
@@ -176,10 +182,10 @@ void GameCore::loopGameCore()
                     hero.m_HeroDir = 1;
                     hero.m_HeroActionCourante = 1;
 
-                    heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                    heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                     heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y + hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                    heroBB.width = 44;
-                    heroBB.height = 22;
+                    heroBB.width = hero.m_CollBoxHero.x;
+                    heroBB.height = hero.m_CollBoxHero.y;
 
                     if (TheDungeon.isCollisionMap(heroBB, Interactbox) == false)
                     {
@@ -197,10 +203,10 @@ void GameCore::loopGameCore()
                 {
                     hero.m_HeroDir = 2;
                     hero.m_HeroActionCourante = 1;
-                    heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - 22;
+                    heroBB.x = hero.m_HeroPos.x - map_pos_in_screen.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                     heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y - hero.m_SpeedWalk) + (hero.m_HeroSize / 2);
-                    heroBB.width = 44;
-                    heroBB.height = 22;
+                    heroBB.width = hero.m_CollBoxHero.x;
+                    heroBB.height = hero.m_CollBoxHero.y;
 
                     if (TheDungeon.isCollisionMap(heroBB, Interactbox) == false)
                     {
@@ -217,10 +223,10 @@ void GameCore::loopGameCore()
                 {
                     hero.m_HeroDir = 4;
                     hero.m_HeroActionCourante = 1;
-                    heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                    heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x + hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                     heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                    heroBB.width = 44;
-                    heroBB.height = 22;
+                    heroBB.width = hero.m_CollBoxHero.x;
+                    heroBB.height = hero.m_CollBoxHero.y;
 
                     if (TheDungeon.isCollisionMap(heroBB, Interactbox) == false)
                     {
@@ -237,10 +243,10 @@ void GameCore::loopGameCore()
                 {
                     hero.m_HeroDir = 3;
                     hero.m_HeroActionCourante = 1;
-                    heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - 22;
+                    heroBB.x = hero.m_HeroPos.x - (map_pos_in_screen.x - hero.m_SpeedWalk) + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                     heroBB.y = hero.m_HeroPos.y - (map_pos_in_screen.y) + (hero.m_HeroSize / 2);
-                    heroBB.width = 44;
-                    heroBB.height = 22;
+                    heroBB.width = hero.m_CollBoxHero.x;
+                    heroBB.height = hero.m_CollBoxHero.y;
 
                     if (TheDungeon.isCollisionMap(heroBB, Interactbox) == false)
                     {
@@ -266,7 +272,7 @@ void GameCore::loopGameCore()
         {
             raylib::DrawTexture(texTileSet, 0, 0, raylib::WHITE);
         }
-        else if (affiche_mapCollision == true)
+        else if (affiche_Collision == true)
         {
             raylib::DrawTexture(texPrecipiceMap, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
         }
@@ -397,7 +403,14 @@ void GameCore::loopGameCore()
                     break;
                 }
             }
+            if (affiche_Collision_Box == true)
+            {
+                raylib::DrawTexture(texPrecipiceMap, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
 
+                heroBB.x = hero.m_HeroPos.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
+                heroBB.y = hero.m_HeroPos.y + (hero.m_HeroSize / 2);
+                raylib::DrawRectangleLines(heroBB.x, heroBB.y, hero.m_CollBoxHero.x, hero.m_CollBoxHero.y, raylib::RED);
+            }
             if (GameOver == false)
             {
                 if (hero.m_HeroDir == 0)
@@ -442,7 +455,23 @@ void GameCore::loopGameCore()
                     }
                 }
             }
+            // Draw des Arch pour deco
             raylib::DrawTexture(texMap3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
+            
+            //Draw etiquette de sortie
+            if ((currentTime - Time_mvt_Etiquette_Sortie) > 0.080)
+            {
+                Index_mvt_Etiquette_Sortie = (Index_mvt_Etiquette_Sortie + 1) % 12;
+
+                Time_mvt_Etiquette_Sortie = currentTime;
+            }
+            TilePosXY = TheDungeon.m_Environnement.getTile(199);
+            rectTile.x = TilePosXY.x;
+            rectTile.y = TilePosXY.y;
+            raylib::DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (TheDungeon.Sortie.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (TheDungeon.Sortie.y * (float)TheDungeon.m_Environnement.m_TileSize) + mvt_Etiquette_Sortie[Index_mvt_Etiquette_Sortie]) }, raylib::Color{255,255,255,200});
+
+
+
         }
 
         if (affiche_tileset == true)
@@ -451,10 +480,8 @@ void GameCore::loopGameCore()
             {
                 for (int y = 0; y < TheDungeon.m_Environnement.m_sizeTileSet_y; y++)
                 {
-                    if (affiche_grille == true)
-                    {
-                        raylib::DrawRectangleLines(x * 48, y * 48, 48, 48, raylib::GRAY);
-                    }
+                    raylib::DrawRectangleLines(x * 48, y * 48, 48, 48, raylib::GRAY);
+                    
                     raylib::DrawText(raylib::TextFormat("%d", x + y * 20), (x * 48) + 5, (y * 48) + 5, 10, raylib::WHITE);
                 }
             }

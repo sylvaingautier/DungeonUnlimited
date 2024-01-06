@@ -20,7 +20,8 @@ void Hero::Init()
 	m_SizeHeroSet_y = 14;
 	m_RecHero.height = m_HeroSize;
 	m_RecHero.width = m_HeroSize;
-
+	m_CollBoxHero.x = 40;
+	m_CollBoxHero.y = 22;
 
 	// Initialisation des Structures pour le IDLE du Hero
 	m_Idle.IndexFrame = 0;

@@ -139,15 +139,31 @@ Dungeon_map::Dungeon_map()
             {
                 if (block != 0)
                 {
-                    TilePosXY = m_Environnement.getTile(block);
+                    // Morceau de l'escalier montant de la sortie
+                    if (block == 328)
+                    {
+                        TilePosXY = m_Environnement.getTile(308);
 
-                    rectTile.x = TilePosXY.x;
-                    rectTile.y = TilePosXY.y;
+                        rectTile.x = TilePosXY.x;
+                        rectTile.y = TilePosXY.y;
 
-                    raylib::ImageDraw(&map[1], m_Environnement.m_Tileset,
-                        rectTile,
-                        raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
-                        raylib::WHITE);
+                        raylib::ImageDraw(&map[1], m_Environnement.m_Tileset,
+                            rectTile,
+                            raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)((y-1) * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                            raylib::WHITE);
+                    }
+                    else
+                    {
+                        TilePosXY = m_Environnement.getTile(block);
+
+                        rectTile.x = TilePosXY.x;
+                        rectTile.y = TilePosXY.y;
+
+                        raylib::ImageDraw(&map[1], m_Environnement.m_Tileset,
+                            rectTile,
+                            raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                            raylib::WHITE);
+                    }
                 }
             }
 
@@ -232,16 +248,42 @@ Dungeon_map::Dungeon_map()
 
 bool Dungeon_map::isCollisionMap(raylib::Rectangle hero, Block_Interact&Collbox)
 {
+    int index = 0;
+    Block_Interact boxTempo;
+
     for (Block_Interact box : CollisionMap)
     {
+        
         if (box.Type != 3) // 3 = Arch ==> l'arch n'est pas un mur
         {
             if (raylib::CheckCollisionRecs(hero, box.Box) == true)
             {
-                Collbox = box;
-                return true;
+                if ((box.Type == 1) || (box.Type == 2))
+                {
+                    // Fin immediatement
+                    Collbox = box;
+                    return true;
+                }
+                else
+                {
+                    // on attend eventuellemnt une porte dans une 2 eme collision
+                    boxTempo = box;
+                    index++;
+                }
+                if (index == 2)
+                {
+                    // au bout de 2 collisions on arrete
+                    Collbox = box;
+                    return true;
+                }
             }
         }
+    }
+    // si pas de 2eme collision
+    if (index != 0)
+    {
+        Collbox = boxTempo;
+        return true;
     }
     return false;
 }

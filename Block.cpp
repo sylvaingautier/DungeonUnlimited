@@ -166,6 +166,12 @@ std::vector<int> Block::getTilesetBlockDetail(long long centre, long long HG, lo
 			list.push_back(17);
 		}
 	}
+	// Detail de l'escalier vers le haut
+	if ((centre & Enum_type_dungeon_generator::STAIR_UP) == Enum_type_dungeon_generator::STAIR_UP)
+	{
+		//TileSet Sol
+		list.push_back(328);
+	}
 	return list;
 }
 int Block::getTilesetBlock(long long centre,long long haut, long long bas, long long gauche, long long droite)
@@ -190,12 +196,12 @@ int Block::getTilesetBlock(long long centre,long long haut, long long bas, long 
 	if ((centre &Enum_type_dungeon_generator::STAIR_DN) == Enum_type_dungeon_generator::STAIR_DN)
 	{
 		//TileSet Sol
-		return sol(haut, bas, gauche, droite);
+		return 285;
 	}
 	if ((centre & Enum_type_dungeon_generator::STAIR_UP) == Enum_type_dungeon_generator::STAIR_UP)
 	{
 		//TileSet Sol
-		return sol(haut, bas, gauche, droite);
+		return 328;
 	}
 
 	return sol(haut, bas, gauche, droite);

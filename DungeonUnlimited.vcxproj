@@ -138,6 +138,7 @@
     <ClCompile Include="Hero.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monstre.cpp" />
     <ClCompile Include="Randomer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="GameCore.h" />
     <ClInclude Include="Hero.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Monstre.h" />
     <ClInclude Include="Randomer.h" />
   </ItemGroup>
   <ItemGroup>
