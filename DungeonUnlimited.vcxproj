@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.json" />
     <None Include="Resources\donjon\The Dark Crypts of the Lich Princess 01.pdf" />
+    <None Include="Resources\donjon\The Forsaken Tomb of Gothmog of Udun 01.json" />
+    <None Include="Resources\donjon\The Forsaken Tomb of Gothmog of Udun 01.pdf" />
     <None Include="Resources\donjon\The Pit of Beru 01.json" />
     <None Include="Resources\donjon\The Pit of Bloody Terror 01.json" />
   </ItemGroup>

@@ -24,6 +24,7 @@ public:
 	int sizeMapPixels_y;
 	int size_y;
 	int size_x;
+	raylib::Vector2 Entree,Sortie;
 	Environnements m_Environnement;
 	struct s_liste_block
 	{

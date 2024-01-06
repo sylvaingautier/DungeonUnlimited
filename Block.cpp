@@ -187,6 +187,17 @@ int Block::getTilesetBlock(long long centre,long long haut, long long bas, long 
 	
 		return mur( haut, bas,  gauche, droite);
 	}
+	if ((centre &Enum_type_dungeon_generator::STAIR_DN) == Enum_type_dungeon_generator::STAIR_DN)
+	{
+		//TileSet Sol
+		return sol(haut, bas, gauche, droite);
+	}
+	if ((centre & Enum_type_dungeon_generator::STAIR_UP) == Enum_type_dungeon_generator::STAIR_UP)
+	{
+		//TileSet Sol
+		return sol(haut, bas, gauche, droite);
+	}
+
 	return sol(haut, bas, gauche, droite);
 }
 int Block::porte(long long haut, long long bas, long long gauche, long long droite)

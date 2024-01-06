@@ -93,5 +93,11 @@
     <None Include="Resources\donjon\The Pit of Bloody Terror 01.json">
       <Filter>Fichiers de ressources</Filter>
     </None>
+    <None Include="Resources\donjon\The Forsaken Tomb of Gothmog of Udun 01.pdf">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
+    <None Include="Resources\donjon\The Forsaken Tomb of Gothmog of Udun 01.json">
+      <Filter>Fichiers de ressources</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -13,8 +13,8 @@ void GameCore::initGameCore()
     raylib::SetTargetFPS(60);
     TheDungeon.Init();
     hero.Init();
-    hero.m_HeroPos.x = float(SCREENWIDTH / 2);
-    hero.m_HeroPos.y = float(SCREENHEIGHT / 2);
+    hero.m_HeroPos.x = ((int((SCREENWIDTH  / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
+    hero.m_HeroPos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
 
 }
 
@@ -37,8 +37,10 @@ void GameCore::loopGameCore()
     raylib::Texture2D texHero_Flip_Horizontal;
     raylib::Texture2D texPrecipiceMap;
     raylib::Vector2 map_pos_in_screen{};
-    map_pos_in_screen.x = 0;
-    map_pos_in_screen.y = 0;
+    map_pos_in_screen.x = ((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2) +1) * TheDungeon.m_Environnement.m_TileSize;
+    map_pos_in_screen.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize)) / 2) +1) * TheDungeon.m_Environnement.m_TileSize;
+    map_pos_in_screen.x += -(TheDungeon.Entree.x) * TheDungeon.m_Environnement.m_TileSize;
+    map_pos_in_screen.y += -(TheDungeon.Entree.y) * TheDungeon.m_Environnement.m_TileSize;
     texHero= LoadTextureFromImage(hero.m_HeroSet);
     texHero_Flip_Horizontal = LoadTextureFromImage(hero.m_HeroSet_Flip_Horizontal);
     texTileSet = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);

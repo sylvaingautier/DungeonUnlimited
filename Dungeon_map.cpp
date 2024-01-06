@@ -8,11 +8,11 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Tunnels of Shiva the Destroyer 02.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Forsaken Tomb of Gothmog of Udun 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
-        return;
+        exit(0);
     }
 
     IStreamWrapper isw{ ifs };
@@ -38,6 +38,38 @@ Dungeon_map::Dungeon_map()
     raylib::Rectangle rectTile{};
     rectTile.height = TileSizeXY.x;
     rectTile.width = TileSizeXY.y;
+
+    // Coordonnees d'entrees et de sorties
+    Entree.x = 0;
+    Entree.y = 0;
+    Sortie.x = 0;
+    Sortie.y = 0;
+    for (int index = 0; index < d["stairs"].Capacity(); index++)
+    {
+        int length=d["stairs"][index]["key"].GetStringLength();
+        if (length > 0)
+        {
+            // Entree
+            if (d["stairs"][index]["key"].GetString()[0] =='d')
+            {
+                Entree.x = d["stairs"][index]["col"].GetInt();
+                Entree.y = d["stairs"][index]["row"].GetInt();
+            }
+            // Sortie
+            if (d["stairs"][index]["key"].GetString()[0] == 'u')
+            {
+                Sortie.x = d["stairs"][index]["col"].GetInt();
+                Sortie.y = d["stairs"][index]["row"].GetInt();
+            }
+        }
+    }
+    if ((Entree.x==0) || (Sortie.x==0))
+    {
+        std::cerr << "Impossible de trouver l'entree ou la sortie sur le fichier JSON\n";
+        exit(0);
+    }
+   
+
 
     //Couche N°0 (Couche Fixe) mur + sol
     for (int x = 0; x < size_x; x++)
