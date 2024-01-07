@@ -9,3 +9,15 @@ bool Block_Interact::operator==(const Block_Interact& b)
 	}
 	return false;
 }
+
+const Block_Interact& Block_Interact::operator=(const Block_Interact& src)
+{
+	// TODO: insérer une instruction return ici
+
+	Box= src.Box;
+	Type = src.Type;
+	Etat = src.Etat;
+	x = src.x;
+	y = src.y;
+	return *this;
+}

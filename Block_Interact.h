@@ -15,6 +15,6 @@ public:
 		int x;
 		int y;
 		bool operator==(const Block_Interact&);
-	
+		const Block_Interact& operator=(const Block_Interact&);
 };
 

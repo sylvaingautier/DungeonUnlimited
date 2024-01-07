@@ -13,12 +13,13 @@ void GameCore::initGameCore()
     raylib::SetTargetFPS(60);
     TheDungeon.Init();
     hero.Init();
+    monstre.Init();
     hero.m_HeroPos.x = ((int((SCREENWIDTH  / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
     hero.m_HeroPos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
-    troll.Init();
-    troll.m_Pos.x = ((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
-    troll.m_Pos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
+
+
 }
+
 
 void GameCore::endGameCore()
 {
@@ -37,6 +38,8 @@ void GameCore::loopGameCore()
     raylib::Texture2D texMap3;
     raylib::Texture2D texHero;
     raylib::Texture2D texHero_Flip_Horizontal;
+    raylib::Texture2D texMonstre;
+    raylib::Texture2D texMonstre_Flip_Horizontal;
     raylib::Texture2D texPrecipiceMap;
     raylib::Vector2 map_pos_in_screen{};
     map_pos_in_screen.x = ((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2) +1) * TheDungeon.m_Environnement.m_TileSize;
@@ -45,6 +48,10 @@ void GameCore::loopGameCore()
     map_pos_in_screen.y += -(TheDungeon.Entree.y) * TheDungeon.m_Environnement.m_TileSize;
     texHero= LoadTextureFromImage(hero.m_HeroSet);
     texHero_Flip_Horizontal = LoadTextureFromImage(hero.m_HeroSet_Flip_Horizontal);
+
+    texMonstre = LoadTextureFromImage(monstre.m_Set);
+    texMonstre_Flip_Horizontal = LoadTextureFromImage(monstre.m_Set_Flip_Horizontal);
+
     texTileSet = LoadTextureFromImage(TheDungeon.m_Environnement.m_Tileset);
     texMap0 = LoadTextureFromImage(TheDungeon.map[0]);
     texMap1 = LoadTextureFromImage(TheDungeon.map[1]);
@@ -99,6 +106,7 @@ void GameCore::loopGameCore()
                 previousTime_Hero = currentTime;
 
             }
+            // Attack du Hero
             if (hero.m_HeroActionCourante == 2)
             {
                 if (raylib::IsKeyDown(raylib::KEY_UP))
@@ -123,6 +131,7 @@ void GameCore::loopGameCore()
                     previousTime_Hero = currentTime;
                 }
             }
+            // Mouvement du Hero
             if ((hero.m_HeroActionCourante == 0) || (hero.m_HeroActionCourante == 1))
             {
                 if (raylib::IsKeyDown(raylib::KEY_E))
@@ -173,6 +182,20 @@ void GameCore::loopGameCore()
                         if ((Interactbox.Type == 4) || (Interactbox.Type == 5) || (Interactbox.Type == 14) || (Interactbox.Type == 15))// porte avec verrou
                         {
 
+                        }
+                        if ((Interactbox.Type == 6) && (Interactbox.Etat==0)) // Tresors à ouvrir
+                        {
+                            Block_Interact MajBlock;
+                            auto it = std::find(TheDungeon.CollisionMap.begin(), TheDungeon.CollisionMap.end(),
+                                Interactbox);
+
+                            if (it != TheDungeon.CollisionMap.end()) {
+                                TheDungeon.CollisionMap.erase(it);
+                                MajBlock = Interactbox;
+                                MajBlock.Etat = 1;
+                                
+                                TheDungeon.CollisionMap.push_back(MajBlock);
+                            }
                         }
                     }
                     previousTime_Hero = currentTime;
@@ -262,6 +285,7 @@ void GameCore::loopGameCore()
                 }
 
             }
+            // Mouvement des monstres
         }
         //----------------------------------------------------------------------------------
         // Draw
@@ -335,7 +359,8 @@ void GameCore::loopGameCore()
 
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + ((box.x + 1) * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + ((box.y) * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
                     break;
-                case 4: // Porte Horizontal Lock
+                case 4:
+                case 5:// Porte Horizontal Lock
                     // 1 x block
                     TilePosXY = TheDungeon.m_Environnement.getTile(234);
                     rectTile.x = TilePosXY.x;
@@ -343,9 +368,23 @@ void GameCore::loopGameCore()
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
 
                     break;
-                case 5: // Porte Horizontal Blocké
+               /* case 5: // Porte Horizontal Blocké
                     // 1 x block
                     TilePosXY = TheDungeon.m_Environnement.getTile(288);
+                    rectTile.x = TilePosXY.x;
+                    rectTile.y = TilePosXY.y;
+                    DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
+
+                    break;*/
+                case 6: // tresors
+                    if (box.Etat == 0)
+                    {
+                        TilePosXY = TheDungeon.m_Environnement.getTile(334);
+                    }
+                    else
+                    {
+                        TilePosXY = TheDungeon.m_Environnement.getTile(335);
+                    }
                     rectTile.x = TilePosXY.x;
                     rectTile.y = TilePosXY.y;
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
@@ -378,6 +417,7 @@ void GameCore::loopGameCore()
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
                     break;
                 case 14: // Porte  Verttical Lock
+                case 15:
                     // 2 x blocks
                     TilePosXY = TheDungeon.m_Environnement.getTile(215);
                     rectTile.x = TilePosXY.x;
@@ -392,15 +432,15 @@ void GameCore::loopGameCore()
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
 
                     break;
-                case 15: // Porte Verttical Blocké
+                /*case 15: // Porte Verttical Blocké
                     // 1 x block
                     TilePosXY = TheDungeon.m_Environnement.getTile(288);
                     rectTile.x = TilePosXY.x;
                     rectTile.y = TilePosXY.y;
 
                     DrawTextureRec(texTileSet, rectTile, raylib::Vector2{ (float)(map_pos_in_screen.x + (box.x * (float)TheDungeon.m_Environnement.m_TileSize)), (float)(map_pos_in_screen.y + (box.y * (float)TheDungeon.m_Environnement.m_TileSize)) }, raylib::WHITE);
-
-                    break;
+                    
+                    break;*/
                 }
             }
             if (affiche_Collision_Box == true)
@@ -413,6 +453,7 @@ void GameCore::loopGameCore()
             }
             if (GameOver == false)
             {
+                raylib::DrawTextureRec(texMonstre, monstre.m_Rec, monstre.m_Pos, raylib::WHITE);
                 if (hero.m_HeroDir == 0)
                 {
                     if ((currentTime - previousTime_HeroIdle) > hero.m_TimeWait)

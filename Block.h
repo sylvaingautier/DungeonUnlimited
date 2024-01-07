@@ -43,7 +43,7 @@ public:
 public:
 	Block();
 	~Block();
-	int isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite);
+	int TypeOfInteractObject(long long centre, long long haut, long long bas, long long gauche, long long droite);
 	int getBlockType(long long centre);
 	std::vector<int> getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD, long long haut, long long bas, long long gauche, long long droite);
 	int getTilesetBlock(long long centre, long long haut, long long bas, long long gauche, long long droite);

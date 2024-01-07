@@ -5,7 +5,7 @@ namespace raylib {
 #include "raylib.h"
 }
 #include "hero.h"
-#include "monstre.h"
+
 class GameCore
 {
 public:
@@ -16,7 +16,9 @@ public:
 	static const int SCREENHEIGHT = 720;
 	Dungeon_map TheDungeon;
 	Hero hero;
-	Monstre troll;
+	Monstre monstre;
+	
+
 public:
 	GameCore();
 	void initGameCore();

@@ -12,8 +12,8 @@ Block::~Block()
 /// 
 /// </summary>
 /// <param name="centre"></param>
-/// <returns>0 = Rien ; 1 = Porte_H ; 2 = Grille_H ; 3 = Arche_H; 4 = Porte_H_LOCK ; 5 = porte blokée;  11 = Porte_V ; 12 = Grille_V ; 13 = Arche_V ; 14 = Porte_V_LOCK; 15 = porte blokée </returns>
-int Block::isDoor(long long centre, long long haut, long long bas, long long gauche, long long droite)
+/// <returns>0 = Rien ; 1 = Porte_H ; 2 = Grille_H ; 3 = Arche_H; 4 = Porte_H_LOCK ; 5 = porte blokée; 6=Tresors  11 = Porte_V ; 12 = Grille_V ; 13 = Arche_V ; 14 = Porte_V_LOCK; 15 = porte blokée </returns>
+int Block::TypeOfInteractObject(long long centre, long long haut, long long bas, long long gauche, long long droite)
 {
 	//C'est une ouverture Horizontal
 	if ( (((haut & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR) || ((haut & Enum_type_dungeon_generator::ROOM) == Enum_type_dungeon_generator::ROOM))

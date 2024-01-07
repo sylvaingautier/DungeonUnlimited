@@ -12,6 +12,9 @@ public:
 	// Local Variables Definition (local to this module)
 	//----------------------------------------------------------------------------------
 
+
+
+
 	raylib::Image m_Set;
 	raylib::Image m_Set_Flip_Horizontal;
 	int m_Size;

@@ -1,6 +1,56 @@
 #include "Dungeon_map.h"
 
 
+
+std::vector<std::string> Dungeon_map::GetListMonsters(std::string& substr, std::string& str)
+{
+    int occurrences = 0;
+    std::string::size_type pos = 0;
+    std::string::size_type posPrec = 0;
+    std::vector<std::string> retourList;
+    std::vector<int> occurPosList;
+    occurPosList.push_back(0);
+
+    while ((pos = str.find(substr, pos)) != std::string::npos) {
+        ++occurrences;
+        pos += substr.length();
+
+        occurPosList.push_back(pos);
+    }
+
+    for (int occurPos = 0; occurPos < (occurPosList.capacity()); occurPos++)
+    {
+        int pos_debut = occurPosList.at(occurPos);
+        int pos_fin = 0;
+        if (occurPos < (occurPosList.capacity() - 1))
+        {
+            pos_fin = occurPosList.at(occurPos + 1) - occurPosList.at(occurPos) - substr.length();;
+        }
+        else
+        {
+            pos_fin = str.length();
+        }
+        retourList.push_back(str.substr(pos_debut, pos_fin));
+    }
+
+    return  retourList;
+}
+int Dungeon_map::GetNbMonster(std::string& str)
+{
+    int occurrences = 0;
+    std::string::size_type pos = 0;
+    for (std::string Coeff : m_Coeff)
+    {
+        occurrences++;
+        pos = str.find(Coeff, 0);
+        if (pos != std::string::npos)
+        {
+            return occurrences;
+        }
+
+    }
+    return  1;
+}
 Dungeon_map::Dungeon_map()
 {
     // Chargement TileSet
@@ -8,7 +58,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Forsaken Tomb of Gothmog of Udun 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Dread Tomb of Woe 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
@@ -39,27 +89,259 @@ Dungeon_map::Dungeon_map()
     rectTile.height = TileSizeXY.x;
     rectTile.width = TileSizeXY.y;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // JSON
+    // Enregistrement du nombre de clé ou bombe pour quitter une room
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "---- JSON ----------------------------------------", LogLevel::INFO);
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "Faut il une clé pour quitter la room : ", LogLevel::INFO);
+    for (int indexRoom = 1; indexRoom < d["rooms"].Capacity(); indexRoom++)  // La Room 0, n'existe jamais
+    {
+        struct s_typePortesRoom TypePortesRoom;
+        TypePortesRoom.NbPorteLocker = 0;
+        TypePortesRoom.NbPorteSecret=0;
+        TypePortesRoom.id_Room = indexRoom;
+        assert(d["rooms"][indexRoom]["col"].IsInt());
+        TypePortesRoom.Room.x = d["rooms"][indexRoom]["col"].GetInt();
+        assert(d["rooms"][indexRoom]["row"].IsInt());
+        TypePortesRoom.Room.y = d["rooms"][indexRoom]["row"].GetInt();
+        assert(d["rooms"][indexRoom]["height"].IsInt());
+        TypePortesRoom.Room.height = d["rooms"][indexRoom]["height"].GetInt() / 10;
+        assert(d["rooms"][indexRoom]["width"].IsInt());
+        TypePortesRoom.Room.width = d["rooms"][indexRoom]["width"].GetInt() / 10;
+        assert(d["rooms"][indexRoom].IsObject());
+        if ((d["rooms"][indexRoom].HasMember("doors") == true))
+        {
+            assert(d["rooms"][indexRoom]["doors"].IsObject());
+            if ((d["rooms"][indexRoom]["doors"].HasMember("north") == true))
+            {
+                assert(d["rooms"][indexRoom]["doors"]["north"].IsArray());
+                int nb = d["rooms"][indexRoom]["doors"]["north"].Capacity();
+                for (int indexDoor=0; indexDoor <nb; indexDoor++)
+                {
+                    assert(d["rooms"][indexRoom]["doors"]["north"][indexDoor].IsObject());
+                    assert(d["rooms"][indexRoom]["doors"]["north"][indexDoor]["type"].IsString());
+                    std::string typeStr = d["rooms"][indexRoom]["doors"]["north"][indexDoor]["type"].GetString();
+                    if (typeStr == "locked")
+                    {
+                        TypePortesRoom.NbPorteLocker++;
+                    }
+                    if (typeStr == "secret")
+                    {
+                        TypePortesRoom.NbPorteSecret++;
+                    }
+                }
+
+            }
+            if ((d["rooms"][indexRoom]["doors"].HasMember("south") == true))
+            {
+                assert(d["rooms"][indexRoom]["doors"]["south"].IsArray());
+                int nb = d["rooms"][indexRoom]["doors"]["south"].Capacity();
+                for (int indexDoor = 0; indexDoor < nb; indexDoor++)
+                {
+                    assert(d["rooms"][indexRoom]["doors"]["south"][indexDoor].IsObject());
+                    assert(d["rooms"][indexRoom]["doors"]["south"][indexDoor]["type"].IsString());
+                    std::string typeStr = d["rooms"][indexRoom]["doors"]["south"][indexDoor]["type"].GetString();
+                    if (typeStr == "locked")
+                    {
+                        TypePortesRoom.NbPorteLocker++;
+                    }
+                    if (typeStr == "secret")
+                    {
+                        TypePortesRoom.NbPorteSecret++;
+                    }
+                }
+
+
+            }
+
+            if ((d["rooms"][indexRoom]["doors"].HasMember("west") == true))
+            {
+                assert(d["rooms"][indexRoom]["doors"]["west"].IsArray());
+                int nb = d["rooms"][indexRoom]["doors"]["west"].Capacity();
+                for (int indexDoor = 0; indexDoor < nb; indexDoor++)
+                {
+                    assert(d["rooms"][indexRoom]["doors"]["west"][indexDoor].IsObject());
+                    assert(d["rooms"][indexRoom]["doors"]["west"][indexDoor]["type"].IsString());
+                    std::string typeStr = d["rooms"][indexRoom]["doors"]["west"][indexDoor]["type"].GetString();
+                    if (typeStr == "locked")
+                    {
+                        TypePortesRoom.NbPorteLocker++;
+                    }
+                    if (typeStr == "secret")
+                    {
+                        TypePortesRoom.NbPorteSecret++;
+                    }
+                }
+
+
+            }
+
+            if ((d["rooms"][indexRoom]["doors"].HasMember("east") == true))
+            {
+                assert(d["rooms"][indexRoom]["doors"]["east"].IsArray());
+                int nb = d["rooms"][indexRoom]["doors"]["east"].Capacity();
+                for (int indexDoor = 0; indexDoor < nb; indexDoor++)
+                {
+                    assert(d["rooms"][indexRoom]["doors"]["east"][indexDoor].IsObject());
+                    assert(d["rooms"][indexRoom]["doors"]["east"][indexDoor]["type"].IsString());
+                    std::string typeStr = d["rooms"][indexRoom]["doors"]["east"][indexDoor]["type"].GetString();
+                    if (typeStr == "locked")
+                    {
+                        TypePortesRoom.NbPorteLocker++;
+                    }
+                    if (typeStr == "secret")
+                    {
+                        TypePortesRoom.NbPorteSecret++;
+                    }
+                }
+
+            }
+
+            
+
+                
+                
+        }
+        if ((TypePortesRoom.NbPorteLocker!=0) || (TypePortesRoom.NbPorteSecret!=0))
+        {
+            m_ListsTypePortesRoom.push_back(TypePortesRoom);
+        }
+
+    }
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "--> Nb Room avec des portes particulieres : "+std::to_string(m_ListsTypePortesRoom.capacity()), LogLevel::INFO);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // JSON
+    // Enregistrement du nombre de monstres
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "---- JSON ----------------------------------------", LogLevel::INFO);
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "Recuperation de la Liste des Monstres : ", LogLevel::INFO);
+    int idMonstre = 0;
+    for (int index = 1; index < d["rooms"].Capacity(); index++)  // La Room 0, n'existe jamais
+    {
+        assert(d["rooms"][index].IsObject());
+
+        assert(d["rooms"][index]["contents"].IsObject());
+        if ((d["rooms"][index]["contents"].HasMember("inhabited")==true))
+        {
+            assert(d["rooms"][index]["contents"]["inhabited"].IsString());
+            Logger::GetInstance()->Log(__FILE__, __LINE__, std::string(d["rooms"][index]["contents"]["inhabited"].GetString()), LogLevel::INFO);
+            std::string RoomMonsters(d["rooms"][index]["contents"]["inhabited"].GetString());
+            std::vector<std::string> ListRoomMonster;
+            // combien y a t il de "and" pour séparé les monstres dans une liste
+            std::string AndWord=" and ";
+            ListRoomMonster =GetListMonsters(AndWord, RoomMonsters);
+ 
+            for (std::string RoomMonster : ListRoomMonster)
+            {
+                struct s_monstres Monster;
+                Monster.NbMonster = GetNbMonster(RoomMonster);
+                Monster.id_Room = index;
+                Monster.NomMonster = RoomMonster;
+                Monster.id_monstre = idMonstre;
+                idMonstre= (idMonstre+1)%7;
+                assert(d["rooms"][index]["col"].IsInt());
+                Monster.Room.x = d["rooms"][index]["col"].GetInt();
+                assert(d["rooms"][index]["row"].IsInt());
+                Monster.Room.y = d["rooms"][index]["row"].GetInt();
+                assert(d["rooms"][index]["height"].IsInt());
+                Monster.Room.height = d["rooms"][index]["height"].GetInt()/10;
+                assert(d["rooms"][index]["width"].IsInt());
+                Monster.Room.width = d["rooms"][index]["width"].GetInt()/10;
+                Monster.GiveKey = 0;
+                Monster.Vie = 4;
+
+                Logger::GetInstance()->Log(__FILE__, __LINE__, " - "+RoomMonster+"("+std::to_string(Monster.NbMonster) + ")", LogLevel::INFO);
+                m_ListMonstres.push_back(Monster);
+
+            }
+        }
+    }
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "--> Nb Room avec des monstres : " + std::to_string(m_ListMonstres.capacity()), LogLevel::INFO);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // JSON
+    // Enregistrement du nombre de tresores
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "---- JSON ----------------------------------------", LogLevel::INFO);
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "Recuperation de la Liste des Tresors : ", LogLevel::INFO);
+    for (int index = 1; index < d["rooms"].Capacity(); index++)  // La Room 0, n'existe jamais
+    {
+        assert(d["rooms"][index].IsObject());
+        assert(d["rooms"][index]["contents"].IsObject());
+        if ((d["rooms"][index]["contents"].HasMember("detail") == true))
+        {
+            assert(d["rooms"][index]["contents"]["detail"].IsObject());
+            if ((d["rooms"][index]["contents"]["detail"].HasMember("monster") == true))
+            {
+                assert(d["rooms"][index]["contents"]["detail"]["monster"].IsArray());
+
+                Logger::GetInstance()->Log(__FILE__, __LINE__, std::string(d["rooms"][index]["contents"]["detail"]["monster"][2].GetString()), LogLevel::INFO);
+                struct s_tresors Tresor;
+                Tresor.id_Room = index;
+                Tresor.NomTresors = std::string(d["rooms"][index]["contents"]["detail"]["monster"][2].GetString());
+                assert(d["rooms"][index]["col"].IsInt());
+                Tresor.Room.x = d["rooms"][index]["col"].GetInt();
+                assert(d["rooms"][index]["row"].IsInt());
+                Tresor.Room.y = d["rooms"][index]["row"].GetInt();
+                assert(d["rooms"][index]["height"].IsInt());
+                Tresor.Room.height = d["rooms"][index]["height"].GetInt() / 10;
+                assert(d["rooms"][index]["width"].IsInt());
+                Tresor.Room.width = d["rooms"][index]["width"].GetInt() / 10;
+                m_ListTresors.push_back(Tresor);
+
+            }
+        }
+    }
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "--> Nb Room avec des Tresors : " + std::to_string(m_ListTresors.capacity()), LogLevel::INFO);
+    for (struct s_tresors Tresor : m_ListTresors)
+    {
+        //Ajout Tresor to InteractObject
+        Block_Interact Block{};
+        int x = Tresor.Room.x+1;
+        int y = Tresor.Room.y+1;
+        Block.Box.x = (float)(x * m_Environnement.m_TileSize);
+        Block.Box.y = (float)(y * m_Environnement.m_TileSize);
+        Block.Box.width = TileSizeXY.x;
+        Block.Box.height = TileSizeXY.y;
+        Block.Etat = 0;
+        Block.Type = 6;// Tresors
+        Block.x = x;
+        Block.y = y;
+        if (Block.Type >= 0)
+        {
+            CollisionMap.push_back(Block);
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // JSON
     // Coordonnees d'entrees et de sorties
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "---- JSON ----------------------------------------", LogLevel::INFO);
+    Logger::GetInstance()->Log(__FILE__, __LINE__, "Recuperation des coordonnées d'Entrée et de Sotrie : ", LogLevel::INFO);
     Entree.x = 0;
     Entree.y = 0;
     Sortie.x = 0;
     Sortie.y = 0;
-    for (int index = 0; index < d["stairs"].Capacity(); index++)
+    if ((d.HasMember("stairs") == true))
     {
-        int length=d["stairs"][index]["key"].GetStringLength();
-        if (length > 0)
+        assert(d["stairs"].IsArray());
+        for (int index = 0; index < d["stairs"].Capacity(); index++)
         {
-            // Entree
-            if (d["stairs"][index]["key"].GetString()[0] =='d')
+            int length = d["stairs"][index]["key"].GetStringLength();
+            if (length > 0)
             {
-                Entree.x = d["stairs"][index]["col"].GetInt();
-                Entree.y = d["stairs"][index]["row"].GetInt();
-            }
-            // Sortie
-            if (d["stairs"][index]["key"].GetString()[0] == 'u')
-            {
-                Sortie.x = d["stairs"][index]["col"].GetInt();
-                Sortie.y = d["stairs"][index]["row"].GetInt();
+                // Entree
+                if (d["stairs"][index]["key"].GetString()[0] == 'd')
+                {
+                    Entree.x = d["stairs"][index]["col"].GetInt();
+                    Entree.y = d["stairs"][index]["row"].GetInt();
+                }
+                // Sortie
+                if (d["stairs"][index]["key"].GetString()[0] == 'u')
+                {
+                    Sortie.x = d["stairs"][index]["col"].GetInt();
+                    Sortie.y = d["stairs"][index]["row"].GetInt();
+                }
             }
         }
     }
@@ -69,8 +351,6 @@ Dungeon_map::Dungeon_map()
         exit(0);
     }
    
-
-
     //Couche N°0 (Couche Fixe) mur + sol
     for (int x = 0; x < size_x; x++)
     {
@@ -92,14 +372,14 @@ Dungeon_map::Dungeon_map()
                 raylib::WHITE);
 
             
-            //CollisionMap
+            //InteractObject
             Block_Interact Block{};
             Block.Box.x = (float)(x * m_Environnement.m_TileSize);
             Block.Box.y = (float)(y * m_Environnement.m_TileSize);
             Block.Box.width =  TileSizeXY.x;
             Block.Box.height =  TileSizeXY.y;
             Block.Etat = 0;
-            Block.Type = m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
+            Block.Type = m_Environnement.m_Block.TypeOfInteractObject(d["cells"][y][x].GetInt64(),
                 (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
                 (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
                 (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
@@ -119,6 +399,7 @@ Dungeon_map::Dungeon_map()
         }
     }
     PrecipiceMapColor = raylib::LoadImageColors(PrecipiceMap);
+
     //Couche N°1 (Details Couche Fixe) mur + sol
     // Detail N°1 : ajout des coins des bordures
     for (int x = 1; x < (size_x-1); x++)
@@ -177,7 +458,7 @@ Dungeon_map::Dungeon_map()
         for (int y = 0; y < size_y; y++)
         {
 
-            int type_ouverture = m_Environnement.m_Block.isDoor(d["cells"][y][x].GetInt64(),
+            int type_ouverture = m_Environnement.m_Block.TypeOfInteractObject(d["cells"][y][x].GetInt64(),
                 (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
                 (y == (size_y - 1)) ? 0 : d["cells"][y + 1][x].GetInt64(),
                 (x == 0) ? 0 : d["cells"][y][x - 1].GetInt64(),
