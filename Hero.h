@@ -16,6 +16,8 @@ public:
 	int m_SizeHeroSet_x;
 	int m_SizeHeroSet_y;
 	raylib::Rectangle m_RecHero{};
+	raylib::Vector2 m_PosMapCurr{};
+	raylib::Vector2 m_PosScreenCurr{};
 	raylib::Vector2 m_CollBoxHero{};
 	int m_HeroDir=0; //0=IDLE
 	int m_HeroActionCourante = 0; //0=Aucune action

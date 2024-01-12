@@ -58,7 +58,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Dread Tomb of Woe 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Tomb of Shadowy Death 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";

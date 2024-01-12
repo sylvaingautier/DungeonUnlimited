@@ -21,8 +21,8 @@ void Monstre::Init()
 	m_SizeSet_y = 14;
 	m_Rec.height = m_Size;
 	m_Rec.width = m_Size;
-	m_CollBox.x = 40;
-	m_CollBox.y = 22;
+	m_CollBox.height = 40;
+	m_CollBox.width = 22;
 
 	// Initialisation des Structures pour le IDLE du 
 	m_Idle.IndexFrame = 0;
@@ -56,6 +56,8 @@ void Monstre::Init()
 	m_Chute.Frame_Inv = { 3,2,1,0 };
 	m_Chute.TimeWait = { 0.100,0.080,0.060,0.010 };
 	m_Chute.Pos = { 10,15,20,30 };
+
+
 
 }
 void Monstre::Idle()

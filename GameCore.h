@@ -17,7 +17,7 @@ public:
 	Dungeon_map TheDungeon;
 	Hero hero;
 	Monstre monstre;
-	
+	raylib::Vector2 map_pos_in_screen{};
 
 public:
 	GameCore();
@@ -25,6 +25,8 @@ public:
 	void endGameCore();
 	void loopGameCore();
 	void MortDuHero(int type);
+
+	void IAMonster();
 
 };
 
