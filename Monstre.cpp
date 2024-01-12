@@ -21,8 +21,8 @@ void Monstre::Init()
 	m_SizeSet_y = 14;
 	m_Rec.height = m_Size;
 	m_Rec.width = m_Size;
-	m_CollBox.height = 40;
-	m_CollBox.width = 22;
+	m_CollBox.height = 22;
+	m_CollBox.width = 40;
 
 	// Initialisation des Structures pour le IDLE du 
 	m_Idle.IndexFrame = 0;

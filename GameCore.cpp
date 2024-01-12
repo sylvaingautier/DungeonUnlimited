@@ -19,7 +19,9 @@ void GameCore::initGameCore()
 
     hero.m_HeroPos.x = ((int((SCREENWIDTH  / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
     hero.m_HeroPos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize))/2))* TheDungeon.m_Environnement.m_TileSize;
-
+    monstre.m_PosScreenCurr.x = (monstre.m_PosMapCurr.x * TheDungeon.m_Environnement.m_TileSize);
+    monstre.m_PosScreenCurr.y = (monstre.m_PosMapCurr.y * TheDungeon.m_Environnement.m_TileSize);
+    monstre.m_ActionCourante = 1;// Il se deplace des le debut
 }
 
 void GameCore::endGameCore()
@@ -74,8 +76,8 @@ void GameCore::loopGameCore()
     TilePosXY.x = 0;
     TilePosXY.y = 0;
     raylib::Rectangle rectTile{};
-    rectTile.height = TileSizeXY.x;
-    rectTile.width = TileSizeXY.y;
+    rectTile.height = TileSizeXY.y;
+    rectTile.width = TileSizeXY.x;
     bool GameOver = false;
     double Time_mvt_Etiquette_Sortie = 0;
     int Index_mvt_Etiquette_Sortie = 0;
@@ -183,7 +185,12 @@ void GameCore::loopGameCore()
                         }
                         if ((Interactbox.Type == 4) || (Interactbox.Type == 5) || (Interactbox.Type == 14) || (Interactbox.Type == 15))// porte avec verrou
                         {
+                            auto it = std::find(TheDungeon.CollisionMap.begin(), TheDungeon.CollisionMap.end(),
+                                Interactbox);
 
+                            if (it != TheDungeon.CollisionMap.end()) {
+                                TheDungeon.CollisionMap.erase(it);
+                            }
                         }
                         if ((Interactbox.Type == 6) && (Interactbox.Etat==0)) // Tresors à ouvrir
                         {
@@ -448,6 +455,7 @@ void GameCore::loopGameCore()
                     break;*/
                 }
             }
+            
             if (affiche_Collision_Box == true)
             {
                 raylib::DrawTexture(texPrecipiceMap, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
@@ -455,6 +463,7 @@ void GameCore::loopGameCore()
                 heroBB.x = hero.m_HeroPos.x + (hero.m_HeroSize / 2) - (hero.m_CollBoxHero.x / 2);
                 heroBB.y = hero.m_HeroPos.y + (hero.m_HeroSize / 2);
                 raylib::DrawRectangleLines(heroBB.x, heroBB.y, hero.m_CollBoxHero.x, hero.m_CollBoxHero.y, raylib::RED);
+                raylib::DrawRectangleLines(map_pos_in_screen.x+monstre.m_CollBox.x, map_pos_in_screen.y+monstre.m_CollBox.y, monstre.m_CollBox.width, monstre.m_CollBox.height, raylib::RED);
             }
             if (GameOver == false)
             {
@@ -501,6 +510,26 @@ void GameCore::loopGameCore()
                         raylib::DrawTextureRec(texHero, hero.m_RecHero, Mvt, raylib::WHITE);
                     }
                 }
+
+                // Draw Monsters
+        //        raylib::DrawTextureRec(texMonstre, monstre.m_Rec, raylib::Vector2{ map_pos_in_screen.x + monstre.m_PosScreenCurr.x,map_pos_in_screen.y + monstre.m_PosScreenCurr.y }, raylib::WHITE);
+                
+                static int rot = 0;
+                static double zoom = 5;
+                rot = (rot + 10) % 359;
+                raylib::Rectangle test= monstre.m_Rec;
+                test.x = 300 + (test.width / 2.0f);
+                test.y = 300 + (test.height / 2.0f);
+                raylib::DrawTexturePro(texMonstre, monstre.m_Rec, test, raylib::Vector2{ (test.width / 2.0f),(test.height / 2.0f) }, 0, raylib::WHITE);
+                zoom = zoom - 0.5;
+                test.height = test.height * zoom;
+                test.width = test.width * zoom;
+                test.x = 300;// +(test.width);
+                test.y = 300;// +(test.height);
+
+                raylib::DrawTexturePro(texMonstre, monstre.m_Rec, test, raylib::Vector2{ (test.width /2.0f),(test.height /2.0f) }, rot, raylib::WHITE);
+
+
             }
             // Draw des Arch pour deco
             raylib::DrawTexture(texMap3, map_pos_in_screen.x, map_pos_in_screen.y, raylib::WHITE);
@@ -521,8 +550,9 @@ void GameCore::loopGameCore()
 
         } 
         raylib::DrawText(raylib::TextFormat("Hero Pos : (%d,%d)", (int)hero.m_PosMapCurr.x, (int)hero.m_PosMapCurr.y), 10,100, 15, raylib::WHITE);
+        
 
-        raylib::DrawTextureRec(texMonstre, monstre.m_Rec, monstre.m_PosScreenCurr, raylib::WHITE);
+
 
         if (affiche_tileset == true)
         {
@@ -559,6 +589,8 @@ void GameCore::IAMonster()
     static int chgtdir = 10;
     Block_Interact Interactbox;
     raylib::Vector2 PosScreenCurr_Prec{};
+    raylib::Rectangle CollBox_Prec{};
+    
     double currentTime = raylib::GetTime();
     chgtdir--;
     if (chgtdir == 0)
@@ -566,8 +598,9 @@ void GameCore::IAMonster()
         monstre.m_Dir = rand() % 4;
         chgtdir = (rand()%10)+5;
     }
-    monstre.m_ActionCourante = 1;
 
+
+    // GEstion des annimation
     if ((currentTime - monstre.previousTime_Walk) > monstre.m_TimeWait)
     {
 
@@ -582,37 +615,48 @@ void GameCore::IAMonster()
         if (monstre.m_ActionCourante == 1)
         {
             monstre.Walk(monstre.m_Dir);
-            monstre.m_ActionCourante = 0;
         }
         monstre.previousTime_Walk = currentTime;
     }
-    PosScreenCurr_Prec = monstre.m_PosScreenCurr;
-    switch (monstre.m_Dir)
+
+    // Gestion du mouvement
+    if (monstre.m_ActionCourante == 1)
     {
-    case 0: // haut
-        monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y + monstre.m_SpeedWalk;
-        break;
-    case 1: // bas
-        monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y - monstre.m_SpeedWalk;
-        break;
-    case 2: //droit
-        monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x + monstre.m_SpeedWalk;
-        break;
-    case 3: //gauche
-        monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x - monstre.m_SpeedWalk;
-        break;
+        PosScreenCurr_Prec = monstre.m_PosScreenCurr;
+
+        monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
+        monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
+        CollBox_Prec = monstre.m_CollBox;
+        switch (monstre.m_Dir)
+        {
+        case 0: // haut
+            monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y + monstre.m_SpeedWalk;
+            break;
+        case 1: // bas
+            monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y - monstre.m_SpeedWalk;
+            break;
+        case 2: //droit
+            monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x + monstre.m_SpeedWalk;
+            break;
+        case 3: //gauche
+            monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x - monstre.m_SpeedWalk;
+            break;
+        }
+
+        monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
+        monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
+
+        if (TheDungeon.isCollisionMap(monstre.m_CollBox, Interactbox) == true)
+        {
+            monstre.m_PosScreenCurr = PosScreenCurr_Prec;
+            monstre.m_CollBox = CollBox_Prec;
+        }
+        raylib::Color pixel = TheDungeon.PrecipiceMapColor[(int)(((monstre.m_PosScreenCurr.y + (monstre.m_Rec.height / 2) + 22) * TheDungeon.sizeMapPixels_x) + (monstre.m_PosScreenCurr.x + (monstre.m_Rec.width / 2)))];
+        if ((pixel.r == 255) && (pixel.g == 255) && (pixel.b == 255))
+        {
+            monstre.m_ActionCourante = 3;
+        }
     }
-
-    monstre.m_CollBox.x = monstre.m_PosScreenCurr.x;
-    monstre.m_CollBox.y = monstre.m_PosScreenCurr.y;
-
-    if (TheDungeon.isCollisionMap(monstre.m_CollBox, Interactbox) == false)
-    {
-        monstre.m_PosScreenCurr = PosScreenCurr_Prec;
-    }
-
-    monstre.m_PosScreenCurr.x = map_pos_in_screen.x + (monstre.m_PosMapCurr.x * TheDungeon.m_Environnement.m_TileSize);
-    monstre.m_PosScreenCurr.y = map_pos_in_screen.y + (monstre.m_PosMapCurr.y * TheDungeon.m_Environnement.m_TileSize);
     /*raylib::Vector2 Mvt = hero.m_MicroMvtHero;
     Mvt.x += m_Pos.x;
     Mvt.y += m_Pos.y;*/
