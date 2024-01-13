@@ -13,17 +13,16 @@ public:
 	//----------------------------------------------------------------------------------
 
 
-	raylib::Image m_Set;
-	raylib::Image m_Set_Flip_Horizontal;
 	int m_Size;
 	int m_SizeSet_x;
 	int m_SizeSet_y;
-	raylib::Rectangle m_Rec{};
+	raylib::Vector2	m_OffsetVector{}; // Offset de l'icone pour le debut du monstre
+	raylib::Rectangle m_Rec{}; // Icone du monstre complet
 	raylib::Rectangle m_CollBox{};
 	int m_Dir = 0; //0=IDLE
 	int m_ActionCourante = 0; //0=Aucune action
 	int m_SpeedWalk = 3;
-
+	int m_IdMonsterTileset;
 	float m_TimeWait = 0.100f;
 	raylib::Vector2 m_MicroMvt{};
 	raylib::Vector2 m_PosMapCurr{};

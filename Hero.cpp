@@ -45,7 +45,7 @@ void Hero::Init()
 	m_Attack.NbFrame = 6;
 	m_Attack.Frame = { 0,1,2,3,3,0 };
 	m_Attack.Frame_Inv = { 3,2,1,0,0,3 };
-	m_Attack.TimeWait = { 0.300,0.100,0.100,0.300,0.080,0 };
+	m_Attack.TimeWait = { 0.150,0.050,0.050,0.150,0.040,0 };
 	m_Attack.Pos = { -2,+3,+3,+3,-1,0};
 
 	// Initialisation des Structures pour la chute

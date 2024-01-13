@@ -58,7 +58,10 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Tomb of Shadowy Death 01.json)" };// The Dark Crypts of the Lich Princess 01.json)" };
+    std::ifstream ifs{ R"(Resources/donjon/The Sanctum of Shadowy Nightmares 01.json)" }; 
+    //The Sanctum of Shadowy Nightmares 01.json
+    //The Tomb of Shadowy Death 01.json
+    //The Forsaken Cyst of Doom 01.json
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
@@ -248,7 +251,6 @@ Dungeon_map::Dungeon_map()
                 assert(d["rooms"][index]["width"].IsInt());
                 Monster.Room.width = d["rooms"][index]["width"].GetInt()/10;
                 Monster.GiveKey = 0;
-                Monster.Vie = 4;
 
                 Logger::GetInstance()->Log(__FILE__, __LINE__, " - "+RoomMonster+"("+std::to_string(Monster.NbMonster) + ")", LogLevel::INFO);
                 m_ListMonstres.push_back(Monster);

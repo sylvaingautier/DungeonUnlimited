@@ -51,7 +51,6 @@ public:
 		int id_monstre;
 		int id_Room;
 		bool GiveKey;
-		int Vie; //0 = Mort
 		raylib::Rectangle Room;
 	};
 
