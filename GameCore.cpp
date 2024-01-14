@@ -27,10 +27,13 @@ void GameCore::initGameCore()
     hero.Init();
     hero.m_HeroPos.x = ((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
     hero.m_HeroPos.y = ((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize;
+    hero.m_PosMapCurr.x = TheDungeon.Entree.x;
+    hero.m_PosMapCurr.y = TheDungeon.Entree.y;
     texHero = LoadTextureFromImage(hero.m_HeroSet);
     texHero_Flip_Horizontal = LoadTextureFromImage(hero.m_HeroSet_Flip_Horizontal);
 
     //initialisation de la liste de monstres
+    m_DistanceRenderMonsters = 25;
     for (int index = 0; index < TheDungeon.m_ListMonstres.size(); index++)
     {
         Dungeon_map::s_monstres monstreJSON;
@@ -70,6 +73,26 @@ void GameCore::initGameCore()
         raylib::UnloadImage(m_Set);
         raylib::UnloadImage(m_Set_Flip_Horizontal);
     }
+
+
+    // Set 2d map size.
+    generator.setWorldSize({ TheDungeon.size_x, TheDungeon.size_y });
+    // You can use a few heuristics : manhattan, euclidean or octagonal.
+    generator.setHeuristic(AStar::Heuristic::euclidean);
+    generator.setDiagonalMovement(false);
+    for (int x = 0; x < TheDungeon.size_x; x++)
+    {
+        for (int y = 0; y < TheDungeon.size_y; y++ )
+        {
+            if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] >= 20)
+            {
+                generator.addCollision({ x,y });
+            }
+
+        }
+    }
+        
+
 }
 
 void GameCore::endGameCore()
@@ -388,6 +411,11 @@ void GameCore::loopGameCore()
                     }
                 }
 
+                hero.m_PosMapCurr.x = ((((int((SCREENWIDTH / TheDungeon.m_Environnement.m_TileSize)) / 2) ) * TheDungeon.m_Environnement.m_TileSize) - (map_pos_in_screen.x-72))/ TheDungeon.m_Environnement.m_TileSize;
+                hero.m_PosMapCurr.y = ((((int((SCREENHEIGHT / TheDungeon.m_Environnement.m_TileSize)) / 2)) * TheDungeon.m_Environnement.m_TileSize) - (map_pos_in_screen.y-72))/ TheDungeon.m_Environnement.m_TileSize;
+
+
+
                 // Draw Monsters
                 DrawMonsters();
 
@@ -402,7 +430,7 @@ void GameCore::loopGameCore()
 
 
         } 
-       // raylib::DrawText(raylib::TextFormat("Hero Pos : (%d,%d)", (int)monstre.m_PosMapCurr.x, (int)monstre.m_PosMapCurr.y), 10,10, 15, raylib::WHITE);
+       raylib::DrawText(raylib::TextFormat("Hero Pos : (%d,%d)", (int)hero.m_PosMapCurr.x, (int)hero.m_PosMapCurr.y), 10,10, 15, raylib::WHITE);
         
 
 
@@ -444,38 +472,371 @@ void GameCore::DrawMonsters()
     {
         
         monstre = LesMonstres[index];
-        if ((monstre.m_ActionCourante == 1) || (monstre.m_ActionCourante == 2))
+        if (distance(hero.m_PosMapCurr, monstre.m_PosMapCurr) < m_DistanceRenderMonsters)
         {
-            switch (monstre.m_Dir)
+            if ((monstre.m_ActionCourante == 1) || (monstre.m_ActionCourante == 2))
             {
-            case 1: // haut
-            case 2: // bas
-            case 3: //droit
-                raylib::DrawTextureRec(texMonstre[monstre.m_IdMonsterTileset], monstre.m_Rec, raylib::Vector2{map_pos_in_screen.x + monstre.m_PosScreenCurr.x,map_pos_in_screen.y + monstre.m_PosScreenCurr.y}, raylib::WHITE);
+                switch (monstre.m_Dir)
+                {
+                case 1: // haut
+                case 2: // bas
+                case 3: //droit
+                    raylib::DrawTextureRec(texMonstre[monstre.m_IdMonsterTileset], monstre.m_Rec, raylib::Vector2{ map_pos_in_screen.x + monstre.m_PosScreenCurr.x,map_pos_in_screen.y + monstre.m_PosScreenCurr.y }, raylib::WHITE);
 
-                break;
-            case 4: //gauche
-                raylib::DrawTextureRec(texMonstre_Flip_Horizontal[monstre.m_IdMonsterTileset], monstre.m_Rec, raylib::Vector2{ map_pos_in_screen.x + monstre.m_PosScreenCurr.x,map_pos_in_screen.y + monstre.m_PosScreenCurr.y }, raylib::WHITE);
+                    break;
+                case 4: //gauche
+                    raylib::DrawTextureRec(texMonstre_Flip_Horizontal[monstre.m_IdMonsterTileset], monstre.m_Rec, raylib::Vector2{ map_pos_in_screen.x + monstre.m_PosScreenCurr.x,map_pos_in_screen.y + monstre.m_PosScreenCurr.y }, raylib::WHITE);
 
-                break;
+                    break;
+                }
+            }
+            if (monstre.m_ActionCourante == 3)
+            {
+                double zoom = (monstre.m_Chute.GetFrame(true) / 10.0f);
+                raylib::Rectangle Mvt = monstre.m_Rec;
+                Mvt.height = Mvt.height * zoom;
+                Mvt.width = Mvt.width * zoom;
+                Mvt.x = map_pos_in_screen.x + monstre.m_PosScreenCurr.x + 72;
+                Mvt.y = map_pos_in_screen.y + monstre.m_PosScreenCurr.y + 72;
+                Mvt.x = Mvt.x + (monstre.m_Chute.GetMicroMvtPos(monstre.m_Dir)).x;
+                Mvt.y = Mvt.y + (monstre.m_Chute.GetMicroMvtPos(monstre.m_Dir)).y;
+                raylib::DrawTexturePro(texMonstre[monstre.m_IdMonsterTileset], monstre.m_Rec, Mvt, raylib::Vector2{ (Mvt.width / 2.0f),(Mvt.height / 2.0f) }, monstre.m_Chute.GetFrame(false), raylib::WHITE);
+            }
+            monstre.m_PosMapCurr.x = ((monstre.m_PosScreenCurr.x + monstre.m_OffsetVector.x) / TheDungeon.m_Environnement.m_TileSize);
+            monstre.m_PosMapCurr.y = ((monstre.m_PosScreenCurr.y + monstre.m_OffsetVector.y) / TheDungeon.m_Environnement.m_TileSize);
+            LesMonstres[index] = monstre;
+        }
+    }
+}
+float GameCore::distance(raylib::Vector2 TheHero, raylib::Vector2 TheMonster)
+{
+    // Calculating distance 
+    return  sqrt( pow(TheMonster.x - TheHero.x, 2) + pow(TheMonster.y - TheHero.y, 2) );
+}
+int GameCore::DirMonsterToTheHero(raylib::Vector2 TheHero, raylib::Vector2 TheMonster)
+{
+
+    int x1, y1, x2, y2;
+    raylib::Rectangle CollBox;
+    Block_Interact  Interactbox;
+    CollBox.height = 22;
+    CollBox.width = 22;
+    int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
+    x1 = TheMonster.x;
+    x2 = TheHero.x;
+    y1 = TheMonster.y;
+    y2 = TheHero.y;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+    dx1 = fabs(dx);
+    dy1 = fabs(dy);
+    px = 2 * dy1 - dx1;
+    py = 2 * dx1 - dy1;
+    if (dy1 <= dx1)
+    {
+        if (dx >= 0)
+        {
+            x = x1;
+            y = y1;
+            xe = x2;
+        }
+        else
+        {
+            x = x2;
+            y = y2;
+            xe = x1;
+        }
+        CollBox.x = x;
+        CollBox.y = y;
+        if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] < 20)
+        {
+            if (dx1 >= dy1)
+            {
+                if (dx >= 0)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 4;
+                }
+            }
+            else
+            {
+                if (dy >= 0)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+
+
+        }
+        for (i = 0; x < xe; i++)
+        {
+            x = x + 1;
+            if (px < 0)
+            {
+                px = px + 2 * dy1;
+            }
+            else
+            {
+                if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
+                {
+                    y = y + 1;
+                }
+                else
+                {
+                    y = y - 1;
+                }
+                px = px + 2 * (dy1 - dx1);
+            }
+            CollBox.x = x;
+            CollBox.y = y;
+            if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] < 20)
+            {
+                if (dx1 >= dy1)
+                {
+                    if (dx >= 0)
+                    {
+                        return 3;
+                    }
+                    else
+                    {
+                        return 4;
+                    }
+                }
+                else
+                {
+                    if (dy >= 0)
+                    {
+                        return 2;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+
+
             }
         }
-        if (monstre.m_ActionCourante == 3)
-        {
-            double zoom = (monstre.m_Chute.GetFrame(true) / 10.0f);
-            raylib::Rectangle Mvt = monstre.m_Rec;
-            Mvt.height = Mvt.height * zoom;
-            Mvt.width = Mvt.width * zoom;
-            Mvt.x = map_pos_in_screen.x + monstre.m_PosScreenCurr.x + 72;
-            Mvt.y = map_pos_in_screen.y + monstre.m_PosScreenCurr.y + 72;
-            Mvt.x = Mvt.x + (monstre.m_Chute.GetMicroMvtPos(monstre.m_Dir)).x;
-            Mvt.y = Mvt.y + (monstre.m_Chute.GetMicroMvtPos(monstre.m_Dir)).y;
-            raylib::DrawTexturePro(texMonstre[monstre.m_IdMonsterTileset], monstre.m_Rec, Mvt, raylib::Vector2{ (Mvt.width / 2.0f),(Mvt.height / 2.0f) }, monstre.m_Chute.GetFrame(false), raylib::WHITE);
-        }
-        monstre.m_PosMapCurr.x = ((monstre.m_PosScreenCurr.x + monstre.m_OffsetVector.x) / TheDungeon.m_Environnement.m_TileSize);
-        monstre.m_PosMapCurr.y = ((monstre.m_PosScreenCurr.y + monstre.m_OffsetVector.y) / TheDungeon.m_Environnement.m_TileSize);
-        LesMonstres[index]= monstre;
     }
+    else
+    {
+        if (dy >= 0)
+        {
+            x = x1;
+            y = y1;
+            ye = y2;
+        }
+        else
+        {
+            x = x2;
+            y = y2;
+            ye = y1;
+        }
+        CollBox.x = x;
+        CollBox.y = y;
+        if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] < 20)
+        {
+            if (dx1 >= dy1)
+            {
+                if (dx >= 0)
+                {
+                    return 3;
+                }
+                else
+                {
+                    return 4;
+                }
+            }
+            else
+            {
+                if (dy >= 0)
+                {
+                    return 2;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+
+
+        }
+
+        for (i = 0; y < ye; i++)
+        {
+            y = y + 1;
+            if (py <= 0)
+            {
+                py = py + 2 * dx1;
+            }
+            else
+            {
+                if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
+                {
+                    x = x + 1;
+                }
+                else
+                {
+                    x = x - 1;
+                }
+                py = py + 2 * (dx1 - dy1);
+            }
+            CollBox.x = x;
+            CollBox.y = y;
+            if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] < 20)
+            {
+                if (dx1 >= dy1)
+                {
+                    if (dx >= 0)
+                    {
+                        return 3;
+                    }
+                    else
+                    {
+                        return 4;
+                    }
+                }
+                else
+                {
+                    if (dy >= 0)
+                    {
+                        return 2;
+                    }
+                    else
+                    {
+                        return 1;
+                    }
+                }
+
+
+            }
+        }
+    }
+    return 0;
+}
+bool GameCore::IsMonsterSeeTheHero(raylib::Vector2 TheHero, raylib::Vector2 TheMonster)
+{
+
+    int x1, y1, x2, y2;
+    raylib::Rectangle CollBox;
+    Block_Interact  Interactbox;
+    CollBox.height = 22;
+    CollBox.width = 22;
+    int x, y, dx, dy, dx1, dy1, px, py, xe, ye, i;
+    x1 = TheMonster.x;
+    x2 = TheHero.x;
+    y1 = TheMonster.y;
+    y2 = TheHero.y;
+
+    dx = x2 - x1;
+    dy = y2 - y1;
+    dx1 = fabs(dx);
+    dy1 = fabs(dy);
+    px = 2 * dy1 - dx1;
+    py = 2 * dx1 - dy1;
+    if (dy1 <= dx1)
+    {
+        if (dx >= 0)
+        {
+            x = x1;
+            y = y1;
+            xe = x2;
+        }
+        else
+        {
+            x = x2;
+            y = y2;
+            xe = x1;
+        }
+        CollBox.x = x;
+        CollBox.y = y;
+        if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] >=20)
+        {
+            return false;
+        }
+        for (i = 0; x < xe; i++)
+        {
+            x = x + 1;
+            if (px < 0)
+            {
+                px = px + 2 * dy1;
+            }
+            else
+            {
+                if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
+                {
+                    y = y + 1;
+                }
+                else
+                {
+                    y = y - 1;
+                }
+                px = px + 2 * (dy1 - dx1);
+            }
+            CollBox.x = x;
+            CollBox.y = y;
+            if (TheDungeon.mapBrute[x+y* TheDungeon.size_x] >= 20)
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        if (dy >= 0)
+        {
+            x = x1;
+            y = y1;
+            ye = y2;
+        }
+        else
+        {
+            x = x2;
+            y = y2;
+            ye = y1;
+        }
+        CollBox.x = x;
+        CollBox.y = y;
+        if (TheDungeon.mapBrute[x + y * TheDungeon.size_x]  >= 20)
+        {
+            return false;
+        }
+        for (i = 0; y < ye; i++)
+        {
+            y = y + 1;
+            if (py <= 0)
+            {
+                py = py + 2 * dx1;
+            }
+            else
+            {
+                if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
+                {
+                    x = x + 1;
+                }
+                else
+                {
+                    x = x - 1;
+                }
+                py = py + 2 * (dx1 - dy1);
+            }
+            CollBox.x = x;
+            CollBox.y = y;
+            if (TheDungeon.mapBrute[x + y * TheDungeon.size_x] >= 20)
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 void GameCore::IAMonster()
 {
@@ -485,80 +846,139 @@ void GameCore::IAMonster()
     for (int index = 0; index < LesMonstres.size(); index++)
     {
         monstre = LesMonstres[index];
-
-        raylib::Vector2 PosScreenCurr_Prec{};
-        raylib::Rectangle CollBox_Prec{};
-
-        double currentTime = raylib::GetTime();
-        if (monstre.m_ActionCourante != 3)
+        float Thedistance = distance(hero.m_PosMapCurr, monstre.m_PosMapCurr);
+        if (Thedistance < m_DistanceRenderMonsters)
         {
-            chgtdir--;
-            if (chgtdir == 0)
-            {
-                monstre.m_Dir = (rand() % 4) + 1;
-                chgtdir = (rand() % 100) + 50;
-            }
-        }
+            raylib::Vector2 PosScreenCurr_Prec{};
+            raylib::Rectangle CollBox_Prec{};
 
-        // GEstion des annimation
-        if ((currentTime - monstre.previousTime_Walk) > monstre.m_TimeWait)
-        {
+            double currentTime = raylib::GetTime();
+            if (monstre.m_ActionCourante != 3)
+            {
+                if (Thedistance < 10.0f)
+                {
+                    if (IsMonsterSeeTheHero(hero.m_PosMapCurr, monstre.m_PosMapCurr) == true)
+                    {
+                        
+                        auto path = generator.findPath({ (int)hero.m_PosMapCurr.x, (int)hero.m_PosMapCurr.y }, { (int)monstre.m_PosMapCurr.x, (int)monstre.m_PosMapCurr.y });
+                        if (path.size() > 1)
+                        {
 
-            if (monstre.m_ActionCourante == 3)
-            {
-                monstre.m_ActionCourante = monstre.Chute(monstre.m_Dir);
+                            if (((int)monstre.m_PosMapCurr.x - path[1].x < 0))
+                            {
+                                //droit
+                                monstre.m_Dir = 3;
+                            }
+                            if (((int)monstre.m_PosMapCurr.x - path[1].x > 0))
+                            {
+                                //gauche
+                                monstre.m_Dir = 4;
+                            }
+                            if (((int)monstre.m_PosMapCurr.y - path[1].y < 0))
+                            {
+                                //Bas
+                                monstre.m_Dir = 2;
+                            }
+                            if (((int)monstre.m_PosMapCurr.y - path[1].y > 0))
+                            {
+                                //Haut
+                                monstre.m_Dir = 1;
+                            }
+                        }
+                    }
+                }
+                else {
+                    chgtdir--;
+                    if (chgtdir == 0)
+                    {
+                        monstre.m_Dir = (rand() % 4) + 1;
+                        chgtdir = (rand() % 100) + 50;
+                    }
+                }
             }
-            if (monstre.m_ActionCourante == 2)
+            if ((Thedistance < 1.5f))// && (MonsterSeeTheHero(hero.m_PosMapCurr, monstre.m_PosMapCurr) == true))
             {
-                monstre.m_ActionCourante = monstre.Attack(monstre.m_Dir);
+                /// Est ce que le monstre me voit
+                if (monstre.m_ActionCourante == 1 || (monstre.m_ActionCourante == 0))
+                {
+                    monstre.m_ActionCourante = 2;
+                }
             }
+            else
+            {
+                if ((monstre.m_ActionCourante == 2) || (monstre.m_ActionCourante == 0))
+                {
+                    monstre.m_ActionCourante = 1;
+                }
+            }
+            // GEstion des annimation
+            if ((currentTime - monstre.previousTime_Walk) > monstre.m_TimeWait)
+            {
+
+                if (monstre.m_ActionCourante == 3)
+                {
+                    monstre.m_ActionCourante = monstre.Chute(monstre.m_Dir);
+                }
+                if (monstre.m_ActionCourante == 2)
+                {
+                    if(hero.m_HeroDir==1)
+                        monstre.m_ActionCourante = monstre.Attack(2);
+                    if (hero.m_HeroDir == 2)
+                        monstre.m_ActionCourante = monstre.Attack(1);
+                    if (hero.m_HeroDir == 3)
+                        monstre.m_ActionCourante = monstre.Attack(4);
+                    if (hero.m_HeroDir == 4)
+                        monstre.m_ActionCourante = monstre.Attack(3);
+                }
+                if (monstre.m_ActionCourante == 1)
+                {
+                    monstre.Walk(monstre.m_Dir);
+                }
+                monstre.previousTime_Walk = currentTime;
+            }
+
+            // Gestion du mouvement
             if (monstre.m_ActionCourante == 1)
             {
-                monstre.Walk(monstre.m_Dir);
+                PosScreenCurr_Prec = monstre.m_PosScreenCurr;
+
+                monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
+                monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
+                CollBox_Prec = monstre.m_CollBox;
+                switch (monstre.m_Dir)
+                {
+                case 1: // haut
+                    monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y - monstre.m_SpeedWalk;
+                    break;
+                case 2: // bas
+                    monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y + monstre.m_SpeedWalk;
+                    break;
+                case 3: //droit
+                    monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x + monstre.m_SpeedWalk;
+                    break;
+                case 4: //gauche
+                    monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x - monstre.m_SpeedWalk;
+                    break;
+                }
+
+                monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
+                monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
+
+                if (TheDungeon.isCollisionMap(monstre.m_CollBox, Interactbox) == true)
+                {
+                    monstre.m_PosScreenCurr = PosScreenCurr_Prec;
+                    monstre.m_CollBox = CollBox_Prec;
+                    monstre.m_Dir = (rand() % 4) + 1;
+                }
+                raylib::Color pixel = TheDungeon.PrecipiceMapColor[(int)(((monstre.m_PosScreenCurr.y + (monstre.m_Rec.height / 2) + 22) * TheDungeon.sizeMapPixels_x) + (monstre.m_PosScreenCurr.x + (monstre.m_Rec.width / 2)))];
+                if ((pixel.r == 255) && (pixel.g == 255) && (pixel.b == 255))
+                {
+                    monstre.m_ActionCourante = 3;
+                }
+
             }
-            monstre.previousTime_Walk = currentTime;
+            LesMonstres[index] = monstre;
         }
-
-        // Gestion du mouvement
-        if (monstre.m_ActionCourante == 1)
-        {
-            PosScreenCurr_Prec = monstre.m_PosScreenCurr;
-
-            monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
-            monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
-            CollBox_Prec = monstre.m_CollBox;
-            switch (monstre.m_Dir)
-            {
-            case 1: // haut
-                monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y - monstre.m_SpeedWalk;
-                break;
-            case 2: // bas
-                monstre.m_PosScreenCurr.y = monstre.m_PosScreenCurr.y + monstre.m_SpeedWalk;
-                break;
-            case 3: //droit
-                monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x + monstre.m_SpeedWalk;
-                break;
-            case 4: //gauche
-                monstre.m_PosScreenCurr.x = monstre.m_PosScreenCurr.x - monstre.m_SpeedWalk;
-                break;
-            }
-
-            monstre.m_CollBox.x = monstre.m_PosScreenCurr.x + ((monstre.m_Rec.width / 2) - (monstre.m_CollBox.width / 2));
-            monstre.m_CollBox.y = monstre.m_PosScreenCurr.y + ((monstre.m_Rec.height / 2));
-
-            if (TheDungeon.isCollisionMap(monstre.m_CollBox, Interactbox) == true)
-            {
-                monstre.m_PosScreenCurr = PosScreenCurr_Prec;
-                monstre.m_CollBox = CollBox_Prec;
-            }
-            raylib::Color pixel = TheDungeon.PrecipiceMapColor[(int)(((monstre.m_PosScreenCurr.y + (monstre.m_Rec.height / 2) + 22) * TheDungeon.sizeMapPixels_x) + (monstre.m_PosScreenCurr.x + (monstre.m_Rec.width / 2)))];
-            if ((pixel.r == 255) && (pixel.g == 255) && (pixel.b == 255))
-            {
-                monstre.m_ActionCourante = 3;
-            }
-
-        }
-        LesMonstres[index] = monstre;
     }
     /*raylib::Vector2 Mvt = hero.m_MicroMvtHero;
     Mvt.x += m_Pos.x;

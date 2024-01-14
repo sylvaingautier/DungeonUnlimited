@@ -58,10 +58,10 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Sanctum of Shadowy Nightmares 01.json)" }; 
-    //The Sanctum of Shadowy Nightmares 01.json
-    //The Tomb of Shadowy Death 01.json
-    //The Forsaken Cyst of Doom 01.json
+    std::ifstream ifs{ R"(Resources/donjon/The Tomb of Shadowy Death 01.json )" }; 
+    //The Sanctum of Shadowy Nightmares 01.json   --> moyen
+    //The Tomb of Shadowy Death 01.json   --> petite
+    //The Forsaken Cyst of Doom 01.json   --> enorme
     if (!ifs.is_open())
     {
         std::cerr << "Could not open file for reading!\n";
@@ -72,6 +72,8 @@ Dungeon_map::Dungeon_map()
     d.ParseStream(isw);
     size_y = d["cells"].Capacity();
     size_x = d["cells"][0].Capacity();
+    mapBrute = new int[size_x* size_y];
+
     sizeMapPixels_x = size_x * 48;
     sizeMapPixels_y = size_y * 48;
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
@@ -358,6 +360,7 @@ Dungeon_map::Dungeon_map()
     {
         for (int y = 0; y < size_y; y++)
         {
+            mapBrute[x + y * size_x] = 0;
             TilePosXY = m_Environnement.getTile(m_Environnement.m_Block.getTilesetBlock(
                 d["cells"][y][x].GetInt64(),
                 (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),
@@ -396,7 +399,9 @@ Dungeon_map::Dungeon_map()
             if (m_Environnement.m_Block.getBlockType(d["cells"][y][x].GetInt64())==0)
             {
                 raylib::ImageDrawRectangle(&PrecipiceMap, (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), 48,48, raylib::WHITE);
+                
             }
+            mapBrute[x + y * size_x] = m_Environnement.m_Block.getTilesetBlock(d["cells"][y][x].GetInt64());
 
         }
     }

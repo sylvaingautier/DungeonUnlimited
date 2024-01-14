@@ -1,7 +1,7 @@
 #pragma once
 #include "Dungeon_map.h"
 #include <array> 
-
+#include "AStarPathfinding.h"
 namespace raylib {
 #include "raylib.h"
 }
@@ -17,8 +17,9 @@ public:
 	static const int SCREENHEIGHT = 720;
 	Dungeon_map TheDungeon;
 	Hero hero;
+	int m_DistanceRenderMonsters;
     std::vector <Monstre> LesMonstres;
-
+	AStar::Generator generator;
 	static const int NB_TILESETMONSTER = 7;
 	// Monstres
 	std::array<std::string, NB_TILESETMONSTER> m_TilesetMonster=
@@ -49,9 +50,12 @@ public:
 	void loopGameCore();
 	void MortDuHero(int type);
 	void DrawMonsters();
+	float distance(raylib::Vector2 TheHero, raylib::Vector2 TheMonster);
+	int DirMonsterToTheHero(raylib::Vector2 TheHero, raylib::Vector2 TheMonster);
 	void IAMonster();
 	void DrawDetails();
 	void DrawSortie();
+	bool IsMonsterSeeTheHero(raylib::Vector2 TheHero, raylib::Vector2 TheMonster);
 
 };
 

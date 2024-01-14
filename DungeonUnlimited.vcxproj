@@ -130,6 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AStarPathfinding.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Block_Interact.cpp" />
     <ClCompile Include="Dungeon_map.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="Randomer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AStarPathfinding.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Block_Interact.h" />
     <ClInclude Include="Dungeon_map.h" />

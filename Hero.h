@@ -15,6 +15,7 @@ public:
 	int m_HeroSize;
 	int m_SizeHeroSet_x;
 	int m_SizeHeroSet_y;
+	raylib::Vector2	m_OffsetVector{}; // Offset de l'icone pour le debut du hero
 	raylib::Rectangle m_RecHero{};
 	raylib::Vector2 m_PosMapCurr{};
 	raylib::Vector2 m_PosScreenCurr{};

@@ -47,6 +47,7 @@ public:
 	int getBlockType(long long centre);
 	std::vector<int> getTilesetBlockDetail(long long centre, long long HG, long long HD, long long BG, long long BD, long long haut, long long bas, long long gauche, long long droite);
 	int getTilesetBlock(long long centre, long long haut, long long bas, long long gauche, long long droite);
+	int getTilesetBlock(long long centre);
 	int porte(long long haut, long long bas, long long gauche, long long droite);
 	int mur(long long haut, long long bas, long long gauche, long long droite);
 

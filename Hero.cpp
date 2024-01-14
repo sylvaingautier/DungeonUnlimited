@@ -18,6 +18,7 @@ void Hero::Init()
 	m_HeroSize = 144;
 	m_SizeHeroSet_x = 4;
 	m_SizeHeroSet_y = 14;
+	m_OffsetVector = { 48,48 };
 	m_RecHero.height = m_HeroSize;
 	m_RecHero.width = m_HeroSize;
 	m_CollBoxHero.x = 40;

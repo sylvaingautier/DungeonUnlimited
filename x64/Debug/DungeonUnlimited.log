@@ -1,61 +1,110 @@
-﻿  Dungeon_map.cpp
+﻿  GameCore.cpp
 C:\DevCpp\DungeonUnlimited\monstre.h(64,27): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
 C:\DevCpp\DungeonUnlimited\monstre.h(64,27): warning C4244:         with
 C:\DevCpp\DungeonUnlimited\monstre.h(64,27): warning C4244:         [
 C:\DevCpp\DungeonUnlimited\monstre.h(64,27): warning C4244:             _Ty=int
 C:\DevCpp\DungeonUnlimited\monstre.h(64,27): warning C4244:         ]
-  (compiler le fichier source 'Dungeon_map.cpp')
+  (compiler le fichier source 'GameCore.cpp')
   
 C:\DevCpp\DungeonUnlimited\monstre.h(68,33): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
 C:\DevCpp\DungeonUnlimited\monstre.h(68,33): warning C4244:         with
 C:\DevCpp\DungeonUnlimited\monstre.h(68,33): warning C4244:         [
 C:\DevCpp\DungeonUnlimited\monstre.h(68,33): warning C4244:             _Ty=int
 C:\DevCpp\DungeonUnlimited\monstre.h(68,33): warning C4244:         ]
-  (compiler le fichier source 'Dungeon_map.cpp')
+  (compiler le fichier source 'GameCore.cpp')
   
 C:\DevCpp\DungeonUnlimited\monstre.h(71,33): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
 C:\DevCpp\DungeonUnlimited\monstre.h(71,33): warning C4244:         with
 C:\DevCpp\DungeonUnlimited\monstre.h(71,33): warning C4244:         [
 C:\DevCpp\DungeonUnlimited\monstre.h(71,33): warning C4244:             _Ty=int
 C:\DevCpp\DungeonUnlimited\monstre.h(71,33): warning C4244:         ]
-  (compiler le fichier source 'Dungeon_map.cpp')
+  (compiler le fichier source 'GameCore.cpp')
   
 C:\DevCpp\DungeonUnlimited\monstre.h(75,27): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
 C:\DevCpp\DungeonUnlimited\monstre.h(75,27): warning C4244:         with
 C:\DevCpp\DungeonUnlimited\monstre.h(75,27): warning C4244:         [
 C:\DevCpp\DungeonUnlimited\monstre.h(75,27): warning C4244:             _Ty=int
 C:\DevCpp\DungeonUnlimited\monstre.h(75,27): warning C4244:         ]
-  (compiler le fichier source 'Dungeon_map.cpp')
+  (compiler le fichier source 'GameCore.cpp')
   
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(18,32): warning C4267: 'argument' : conversion de 'size_t' en '_Ty', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(18,32): warning C4267:         with
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(18,32): warning C4267:         [
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(18,32): warning C4267:             _Ty=int
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(18,32): warning C4267:         ]
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(27,81): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(31,33): warning C4267: '=' : conversion de 'size_t' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(100,39): warning C4018: '<' : incompatibilité signed/unsigned
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(107,68): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(109,68): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(111,79): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(113,77): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(222,31): warning C4018: '<' : incompatibilité signed/unsigned
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(246,65): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(248,65): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(250,75): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(252,73): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(268,31): warning C4018: '<' : incompatibilité signed/unsigned
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(284,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(286,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(288,75): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(290,73): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(301,15): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(302,15): warning C4244: 'initialisation' : conversion de 'float' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(330,35): warning C4018: '<' : incompatibilité signed/unsigned
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(338,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(339,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(344,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(345,64): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(398,110): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-C:\DevCpp\DungeonUnlimited\Dungeon_map.cpp(398,69): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(63,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(63,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(63,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(63,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(63,28): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(67,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(67,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(67,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(67,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(67,34): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(70,34): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(70,34): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(70,34): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(70,34): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(70,34): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\hero.h(74,28): warning C4244: '=' : conversion de '_Ty' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\hero.h(74,28): warning C4244:         with
+C:\DevCpp\DungeonUnlimited\hero.h(74,28): warning C4244:         [
+C:\DevCpp\DungeonUnlimited\hero.h(74,28): warning C4244:             _Ty=int
+C:\DevCpp\DungeonUnlimited\hero.h(74,28): warning C4244:         ]
+  (compiler le fichier source 'GameCore.cpp')
+  
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(15,98): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(16,99): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(28,91): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(29,92): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(347,88): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(347,67): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(352,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(352,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(354,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(354,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(361,92): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(361,71): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(365,104): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(365,82): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(365,60): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(365,50): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(425,80): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(425,59): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(497,41): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(498,39): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(503,183): warning C4244: 'argument' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(514,17): warning C4244: 'return' : conversion de 'double' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(525,20): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(526,17): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(527,20): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(528,17): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(532,15): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(533,15): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(550,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(551,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(598,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(599,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(643,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(644,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(692,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(693,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(521,21): warning C4101: 'Interactbox' : variable locale non référencée
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(734,20): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(735,17): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(736,20): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(737,17): warning C4244: '=' : conversion de 'float' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(741,15): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(742,15): warning C4244: '=' : conversion de 'double' en 'int', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(759,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(760,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(784,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(785,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(806,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(807,21): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(831,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(832,25): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+C:\DevCpp\DungeonUnlimited\GameCore.cpp(730,21): warning C4101: 'Interactbox' : variable locale non référencée
   DungeonUnlimited.vcxproj -> C:\DevCpp\DungeonUnlimited\x64\Debug\DungeonUnlimited.exe

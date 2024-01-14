@@ -206,6 +206,28 @@ int Block::getTilesetBlock(long long centre,long long haut, long long bas, long 
 
 	return sol(haut, bas, gauche, droite);
 }
+int Block::getTilesetBlock(long long centre)
+{
+	if (centre == Enum_type_dungeon_generator::NOTHING)
+	{
+		//TileSet Vide
+
+		return 0;
+	}
+	if ((centre & Enum_type_dungeon_generator::CORRIDOR) == Enum_type_dungeon_generator::CORRIDOR)
+	{
+		//TileSet Sol
+		return 10;
+	}
+	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
+	{
+		//TileSet Mur
+
+		return 20;
+	}
+
+	return 1;
+}
 int Block::porte(long long haut, long long bas, long long gauche, long long droite)
 {
 	if (((haut & Enum_type_dungeon_generator::PERIMETER) != Enum_type_dungeon_generator::PERIMETER) &&

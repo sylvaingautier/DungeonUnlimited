@@ -30,6 +30,8 @@ public:
 			"9 x " };
 
 	raylib::Image map[4];
+	//0=rien ou precipisse
+	int *mapBrute;
 	raylib::Image PrecipiceMap;
 	raylib::Color* PrecipiceMapColor;
 	std::vector <Block_Interact> CollisionMap;
