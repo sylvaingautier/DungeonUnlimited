@@ -221,7 +221,7 @@ int Block::getTilesetBlock(long long centre)
 	}
 	if ((centre & Enum_type_dungeon_generator::PERIMETER) == Enum_type_dungeon_generator::PERIMETER)
 	{
-		//TileSet Mur
+		//TileSet Obstacle
 
 		return 20;
 	}

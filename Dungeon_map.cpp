@@ -58,7 +58,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Tomb of Shadowy Death 01.json )" }; 
+    std::ifstream ifs{ R"(Resources/donjon/The Sanctum of Shadowy Nightmares 01.json)" }; 
     //The Sanctum of Shadowy Nightmares 01.json   --> moyen
     //The Tomb of Shadowy Death 01.json   --> petite
     //The Forsaken Cyst of Doom 01.json   --> enorme
@@ -73,7 +73,13 @@ Dungeon_map::Dungeon_map()
     size_y = d["cells"].Capacity();
     size_x = d["cells"][0].Capacity();
     mapBrute = new int[size_x* size_y];
-
+    for (int x = 0; x < size_x; x++)
+    {
+        for (int y = 0; y < size_y; y++)
+        {
+            mapBrute[x + y * size_x] = 0;
+        }
+    }
     sizeMapPixels_x = size_x * 48;
     sizeMapPixels_y = size_y * 48;
     map[0] = raylib::GenImageColor(size_x * 48, size_y * 48, raylib::BLANK);
@@ -302,6 +308,7 @@ Dungeon_map::Dungeon_map()
         Block_Interact Block{};
         int x = Tresor.Room.x+1;
         int y = Tresor.Room.y+1;
+
         Block.Box.x = (float)(x * m_Environnement.m_TileSize);
         Block.Box.y = (float)(y * m_Environnement.m_TileSize);
         Block.Box.width = TileSizeXY.x;
@@ -313,6 +320,7 @@ Dungeon_map::Dungeon_map()
         if (Block.Type >= 0)
         {
             CollisionMap.push_back(Block);
+            mapBrute[x + y * size_x] = 21;
         }
     }
 
@@ -360,7 +368,7 @@ Dungeon_map::Dungeon_map()
     {
         for (int y = 0; y < size_y; y++)
         {
-            mapBrute[x + y * size_x] = 0;
+
             TilePosXY = m_Environnement.getTile(m_Environnement.m_Block.getTilesetBlock(
                 d["cells"][y][x].GetInt64(),
                 (y == 0) ? 0 : d["cells"][y - 1][x].GetInt64(),

@@ -502,8 +502,23 @@ void GameCore::DrawMonsters()
                 Mvt.y = Mvt.y + (monstre.m_Chute.GetMicroMvtPos(monstre.m_Dir)).y;
                 raylib::DrawTexturePro(texMonstre[monstre.m_IdMonsterTileset], monstre.m_Rec, Mvt, raylib::Vector2{ (Mvt.width / 2.0f),(Mvt.height / 2.0f) }, monstre.m_Chute.GetFrame(false), raylib::WHITE);
             }
-            monstre.m_PosMapCurr.x = ((monstre.m_PosScreenCurr.x + monstre.m_OffsetVector.x) / TheDungeon.m_Environnement.m_TileSize);
-            monstre.m_PosMapCurr.y = ((monstre.m_PosScreenCurr.y + monstre.m_OffsetVector.y) / TheDungeon.m_Environnement.m_TileSize);
+            float value_curr_x = ((monstre.m_PosScreenCurr.x + monstre.m_OffsetVector.x) / TheDungeon.m_Environnement.m_TileSize);
+            float value_curr_y= ((monstre.m_PosScreenCurr.y + monstre.m_OffsetVector.y) / TheDungeon.m_Environnement.m_TileSize);
+
+
+
+        /*    if (value_curr_x > (int)value_curr_x)
+            {
+                value_curr_x = (int)value_curr_x + 1;
+            }
+
+            if (value_curr_y > (int)value_curr_y)
+            {
+                value_curr_y = (int)value_curr_y + 1;
+            }*/
+
+            monstre.m_PosMapCurr.x = value_curr_x;
+            monstre.m_PosMapCurr.y = value_curr_y;
             LesMonstres[index] = monstre;
         }
     }
@@ -855,37 +870,57 @@ void GameCore::IAMonster()
             double currentTime = raylib::GetTime();
             if (monstre.m_ActionCourante != 3)
             {
-                if (Thedistance < 10.0f)
+                if ((Thedistance < 10.0f) && (IsMonsterSeeTheHero(hero.m_PosMapCurr, monstre.m_PosMapCurr) == true))
                 {
-                    if (IsMonsterSeeTheHero(hero.m_PosMapCurr, monstre.m_PosMapCurr) == true)
+                    auto path = generator.findPath({ (int)hero.m_PosMapCurr.x, (int)hero.m_PosMapCurr.y }, { (int)round(monstre.m_PosMapCurr.x), (int)round(monstre.m_PosMapCurr.y) });
+                    if (path.size() > 1)
                     {
-                        
-                        auto path = generator.findPath({ (int)hero.m_PosMapCurr.x, (int)hero.m_PosMapCurr.y }, { (int)monstre.m_PosMapCurr.x, (int)monstre.m_PosMapCurr.y });
-                        if (path.size() > 1)
+                        float Delta_x = abs(monstre.m_PosMapCurr.x - path[1].x);
+                        float Delta_y = abs(monstre.m_PosMapCurr.y - path[1].y);
+                        if (Delta_x < Delta_y)
                         {
 
-                            if (((int)monstre.m_PosMapCurr.x - path[1].x < 0))
+                            if ((monstre.m_PosMapCurr.x < path[1].x))
                             {
                                 //droit
                                 monstre.m_Dir = 3;
-                            }
-                            if (((int)monstre.m_PosMapCurr.x - path[1].x > 0))
+                            }else  if ((monstre.m_PosMapCurr.x > path[1].x))
                             {
                                 //gauche
                                 monstre.m_Dir = 4;
-                            }
-                            if (((int)monstre.m_PosMapCurr.y - path[1].y < 0))
+                            }else if ((monstre.m_PosMapCurr.y - path[1].y < 0))
                             {
                                 //Bas
                                 monstre.m_Dir = 2;
                             }
-                            if (((int)monstre.m_PosMapCurr.y - path[1].y > 0))
+                            else if ((monstre.m_PosMapCurr.y - path[1].y > 0))
                             {
                                 //Haut
                                 monstre.m_Dir = 1;
                             }
                         }
+                        else
+                        {
+                            if ((monstre.m_PosMapCurr.y - path[1].y < 0))
+                            {
+                                //Bas
+                                monstre.m_Dir = 2;
+                            }else if ((monstre.m_PosMapCurr.y - path[1].y > 0))
+                            {
+                                //Haut
+                                monstre.m_Dir = 1;
+                            }else if ((monstre.m_PosMapCurr.x < path[1].x))
+                            {
+                                //droit
+                                monstre.m_Dir = 3;
+                            } else if ((monstre.m_PosMapCurr.x > path[1].x))
+                            {
+                                //gauche
+                                monstre.m_Dir = 4;
+                            }
+                        }
                     }
+
                 }
                 else {
                     chgtdir--;
@@ -896,7 +931,7 @@ void GameCore::IAMonster()
                     }
                 }
             }
-            if ((Thedistance < 1.5f))// && (MonsterSeeTheHero(hero.m_PosMapCurr, monstre.m_PosMapCurr) == true))
+            if ((Thedistance < 1.5f))
             {
                 /// Est ce que le monstre me voit
                 if (monstre.m_ActionCourante == 1 || (monstre.m_ActionCourante == 0))
@@ -921,14 +956,7 @@ void GameCore::IAMonster()
                 }
                 if (monstre.m_ActionCourante == 2)
                 {
-                    if(hero.m_HeroDir==1)
-                        monstre.m_ActionCourante = monstre.Attack(2);
-                    if (hero.m_HeroDir == 2)
-                        monstre.m_ActionCourante = monstre.Attack(1);
-                    if (hero.m_HeroDir == 3)
-                        monstre.m_ActionCourante = monstre.Attack(4);
-                    if (hero.m_HeroDir == 4)
-                        monstre.m_ActionCourante = monstre.Attack(3);
+                    monstre.m_ActionCourante = monstre.Attack(monstre.m_Dir);
                 }
                 if (monstre.m_ActionCourante == 1)
                 {
