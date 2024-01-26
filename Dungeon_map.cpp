@@ -58,7 +58,7 @@ Dungeon_map::Dungeon_map()
     // Chargement des Sprites
     LoadSprites();
 
-    std::ifstream ifs{ R"(Resources/donjon/The Sanctum of Shadowy Nightmares 01.json)" }; 
+    std::ifstream ifs{ R"(Resources/donjon/The Forsaken Cyst of Doom 01.json)" }; 
     //The Sanctum of Shadowy Nightmares 01.json   --> moyen
     //The Tomb of Shadowy Death 01.json   --> petite
     //The Forsaken Cyst of Doom 01.json   --> enorme
@@ -105,9 +105,17 @@ Dungeon_map::Dungeon_map()
     // Enregistrement du nombre de clé ou bombe pour quitter une room
     Logger::GetInstance()->Log(__FILE__, __LINE__, "---- JSON ----------------------------------------", LogLevel::INFO);
     Logger::GetInstance()->Log(__FILE__, __LINE__, "Faut il une clé pour quitter la room : ", LogLevel::INFO);
+    struct s_room Room_0; //Room N°0 inexisitant
+    Room_0.id_Room = 0;
+    Room_0.Room.x = 0;
+    Room_0.Room.y = 0;
+    Room_0.Room.height = 0;
+    Room_0.Room.width = 0;
+    m_ListsRoom.push_back(Room_0);
     for (int indexRoom = 1; indexRoom < d["rooms"].Capacity(); indexRoom++)  // La Room 0, n'existe jamais
     {
         struct s_typePortesRoom TypePortesRoom;
+        struct s_room Room;
         TypePortesRoom.NbPorteLocker = 0;
         TypePortesRoom.NbPorteSecret=0;
         TypePortesRoom.id_Room = indexRoom;
@@ -119,6 +127,19 @@ Dungeon_map::Dungeon_map()
         TypePortesRoom.Room.height = d["rooms"][indexRoom]["height"].GetInt() / 10;
         assert(d["rooms"][indexRoom]["width"].IsInt());
         TypePortesRoom.Room.width = d["rooms"][indexRoom]["width"].GetInt() / 10;
+
+        Room.id_Room = indexRoom;
+        assert(d["rooms"][indexRoom]["col"].IsInt());
+        Room.Room.x = d["rooms"][indexRoom]["col"].GetInt();
+        assert(d["rooms"][indexRoom]["row"].IsInt());
+        Room.Room.y = d["rooms"][indexRoom]["row"].GetInt();
+        assert(d["rooms"][indexRoom]["height"].IsInt());
+        Room.Room.height = d["rooms"][indexRoom]["height"].GetInt() / 10;
+        assert(d["rooms"][indexRoom]["width"].IsInt());
+        Room.Room.width = d["rooms"][indexRoom]["width"].GetInt() / 10;
+        m_ListsRoom.push_back(Room);
+
+
         assert(d["rooms"][indexRoom].IsObject());
         if ((d["rooms"][indexRoom].HasMember("doors") == true))
         {
@@ -411,9 +432,51 @@ Dungeon_map::Dungeon_map()
             }
             mapBrute[x + y * size_x] = m_Environnement.m_Block.getTilesetBlock(d["cells"][y][x].GetInt64());
 
+
+
         }
     }
     PrecipiceMapColor = raylib::LoadImageColors(PrecipiceMap);
+    // Analyse de la liste des Room  pour l'ajout des patterns sur la map
+
+
+    for (int indexRoom = 1; indexRoom < m_ListsRoom.size(); indexRoom++)  // La Room 0, n'existe jamais
+    {
+        s_room Room;
+        bool normal = false;
+        Room = m_ListsRoom.at(indexRoom);
+        int IndexPattern;
+        if ((Room.Room.height == 3) && (Room.Room.width == 3))
+        {
+            struct s_patterne_3_3 theChoicePattern;
+            Randomer rand(0, theChoicePattern.Nb);
+            IndexPattern = theChoicePattern.sizeEach*rand();
+            if (1)//IndexPattern < (theChoicePattern.sizeEach* theChoicePattern.Nb))
+            {
+                for (int y = Room.Room.y; y < Room.Room.y + Room.Room.height; y++)
+                {
+                    for (int x = Room.Room.x; x < Room.Room.x + Room.Room.width; x++)
+                    {
+                        TilePosXY = m_Environnement.getTile(theChoicePattern.pattern[IndexPattern]);
+                        rectTile.x = TilePosXY.x;
+                        rectTile.y = TilePosXY.y;
+
+                        raylib::ImageDraw(&map[0], m_Environnement.m_Tileset,
+                            rectTile,
+                            raylib::Rectangle{ (float)(x * m_Environnement.m_TileSize), (float)(y * m_Environnement.m_TileSize), TileSizeXY.x,TileSizeXY.y },
+                            raylib::WHITE);
+                        IndexPattern++;
+                    }
+                }
+            }
+            
+
+
+        }
+    }
+
+
+
 
     //Couche N°1 (Details Couche Fixe) mur + sol
     // Detail N°1 : ajout des coins des bordures

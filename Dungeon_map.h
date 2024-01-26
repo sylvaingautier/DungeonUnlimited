@@ -28,26 +28,33 @@ public:
 			"7 x ",
 			"8 x ",
 			"9 x " };
-	int m_pattern_3_3Nb = 2;
-	const int m_pattern_3_3[9*6] 
-		= { 9 ,10,11, //1
-	        29,30,31,
-	        49,50,51,
-		    0,1,2,     //2
-		    20,21,22,
-		    40,41,42,
-		    80,81,82,   //3
-		    100,101,102,
-		    120,121,122,
-		    89,90,91,   //4
-	        109,110,111,
-	        129,130,131,
-	         172,173,172, //5
-		     192,193,192,
-		     172,173,172,
-	         1,9,1,       //6
-		     5,7,8,
-		     1,9,1};
+
+	struct s_patterne_3_3
+	{
+		int Nb = 5;
+		int sizeEach = 9;
+		int height = 3;
+		int width = 3;
+		int pattern[9 * 5]
+			= { 9 ,10,11, //0
+				29,30,31,
+				49,50,51,
+				0,1,2,     //1
+				20,21,22,
+				40,41,42,
+				89,90,91,   //2
+				109,110,111,
+				129,130,131,
+				 172,173,172, //3
+				 192,193,192,
+				 172,173,172,
+				 1,9,1,       //4
+				 5,7,8,
+				 1,9,1 };
+
+	} ;
+
+
 
 	raylib::Image map[4];
 	//0=rien ou precipisse
@@ -96,6 +103,13 @@ public:
 	};
 
 	std::vector<struct s_typePortesRoom> m_ListsTypePortesRoom;
+	struct s_room
+	{
+		int id_Room;
+		raylib::Rectangle Room;
+	};
+	std::vector<struct s_room> m_ListsRoom;
+
 
 public:
 	rapidjson::Document d;
